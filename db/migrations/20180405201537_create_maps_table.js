@@ -1,5 +1,3 @@
-// create TABLE maps
-
 exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.withSchema('public').createTable('maps', function(table) {
