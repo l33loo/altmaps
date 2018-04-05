@@ -1,31 +1,102 @@
 <!DOCTYPE html>
 
-<html lang="en">
-  <head>
-    <title>Altmaps - Profile</title>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <% include partials/_styles-and-scripts %>
-    <style>
-       #map {
-        height: 400px;
-        width: 100%;
-       }
-    </style>
-  </head>
+  <!-- Site Properties -->
+  <title>View Map - Altmaps</title>
+
+  <% include partials/_styles-and-scripts %>
+  <link rel="stylesheet" href="/styles/map.css" type="text/css" />
+
+
+
+</head>
 
   <body>
-    <nav> <% /* include partials/_header */ %> </nav>
+    <% var active = {home: "", maps: "active", profile: ""};
+        var hidden = "hidden"; %>
+    <% include partials/_header %>
 
-    <h2>Victoria Beaches</h2>
-    <div id="map"></div>
-    <div>My favourite beach access points, including some exciting surprises!</div>
-    <h3>Pins</h3>
-    <ul>
-      <li>Awesome pin 1</li>
-      <li>Awesome pin 2</li>
-      <li>Awesome pin 3</li>
-      <li>Awesome pin 4</li>
-    </ul>
+
+    <!-- Sidebar Menu -->
+    <div class="ui vertical inverted sidebar menu">
+        <% include partials/_nav %>
+      <a class="item">Login</a>
+      <a class="item">Signup</a>
+    </div>
+
+
+    <!-- Page Contents -->
+    <div class="pusher">
+
+      <div class="ui inverted vertical masthead center aligned segment small">
+
+        <div class="ui container">
+          <div class="ui large secondary inverted pointing menu">
+            <a class="toc item">
+              <i class="sidebar icon"></i>
+            </a>
+              <% include partials/_nav %>
+            <div class="right item">
+              <a class="ui inverted button">Log in</a>
+              <a class="ui inverted button">Sign Up</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui container segment">
+        <div class="ui grid">
+          <div class="ten wide column">
+            <h2>Victoria Beaches</h2>
+            <div id="map"></div>
+          </div>
+          <div class="six wide column">
+          <div>My favourite beach access points, including some exciting surprises!</div>
+            <h3>Pins</h3>
+            <div class="ui list">
+              <div class="item">
+                <i class="map marker icon"></i>
+                <div class="content">
+                  <a class="header">Krolewskie Jadlo</a>
+                  <div class="description">An excellent polish restaurant, quick delivery and hearty, filling meals.</div>
+                </div>
+              </div>
+              <div class="item">
+                <i class="map marker icon"></i>
+                <div class="content">
+                  <a class="header">Xian Famous Foods</a>
+                  <div class="description">A taste of Shaanxi's delicious culinary traditions, with delights like spicy cold noodles and lamb burgers.</div>
+                </div>
+              </div>
+              <div class="item">
+                <i class="map marker icon"></i>
+                <div class="content">
+                  <a class="header">Sapporo Haru</a>
+                  <div class="description">Greenpoint's best choice for quick and delicious sushi.</div>
+                </div>
+              </div>
+              <div class="item">
+                <i class="map marker icon"></i>
+                <div class="content">
+                  <a class="header">Enid's</a>
+                  <div class="description">At night a bar, during the day a delicious brunch spot.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% include partials/_footer %>
+
+    </div>
+
+
   <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_ZslJ7CLPYXoz9hg4Xo8YUkUaQLqNDM&callback=initMap">
   </script>

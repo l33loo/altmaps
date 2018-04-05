@@ -9,34 +9,21 @@
   <title>Homepage - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
-  <script type="text/javascript" src="/scripts/splash.js"></script>
+
 
 
 </head>
 <body>
 
 <!-- Following Menu -->
-<div class="ui large top fixed hidden menu">
-  <div class="ui container">
-    <a class="active item">Home</a>
-    <a class="item">Maps</a>
-    <a class="item">View Profile</a>
-    <div class="right menu">
-      <div class="item">
-        <a class="ui button">Log in</a>
-      </div>
-      <div class="item">
-        <a class="ui primary button">Sign Up</a>
-      </div>
-    </div>
-  </div>
-</div>
+<% var active = {home: "active", maps: "", profile: ""};
+var hidden = "hidden";  %>
+<% include partials/_header %>
+
 
 <!-- Sidebar Menu -->
 <div class="ui vertical inverted sidebar menu">
-  <a class="active item">Home</a>
-  <a class="item">Maps</a>
-  <a class="item">View Profile</a>
+    <% include partials/_nav %>
   <a class="item">Login</a>
   <a class="item">Signup</a>
 </div>
@@ -51,9 +38,7 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">Home</a>
-        <a class="item">Maps</a>
-        <a class="item">View Profile</a>
+          <% include partials/_nav %>
         <div class="right item">
           <a class="ui inverted button">Log in</a>
           <a class="ui inverted button">Sign Up</a>
@@ -66,15 +51,132 @@
         altmaps
       </h1>
       <h2>Sharing your favourite places with the world.</h2>
-      <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div>
+      <a href="#map-cards" ><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
     </div>
   </div>
 
-  <div class="ui container">
+  <div class="ui container segment">
+    <a id="map-cards"></a>
     <div class="ui link cards">
+      <!-- we'll want to load these via AJAX eventually -->
       <div class="card">
         <div class="image">
-          <img src="http://fillmurray.com/300/300">
+          <img src="/images/map_placeholder.jpg">
+        </div>
+        <div class="content">
+          <div class="header">I'm a cool map</div>
+          <div class="meta">
+            <a>Friends</a>
+          </div>
+          <div class="description">
+            This is a map of the coolest things.
+          </div>
+        </div>
+        <div class="extra content">
+          <span class="right floated">
+            Created today!
+          </span>
+          <span>
+            <i class="user icon"></i>
+            75 Contributors
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="image">
+          <img src="/images/map_placeholder.jpg">
+        </div>
+        <div class="content">
+          <div class="header">I'm a cool map</div>
+          <div class="meta">
+            <a>Friends</a>
+          </div>
+          <div class="description">
+            This is a map of the coolest things.
+          </div>
+        </div>
+        <div class="extra content">
+          <span class="right floated">
+            Created today!
+          </span>
+          <span>
+            <i class="user icon"></i>
+            75 Contributors
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="image">
+          <img src="/images/map_placeholder.jpg">
+        </div>
+        <div class="content">
+          <div class="header">I'm a cool map</div>
+          <div class="meta">
+            <a>Friends</a>
+          </div>
+          <div class="description">
+            This is a map of the coolest things.
+          </div>
+        </div>
+        <div class="extra content">
+          <span class="right floated">
+            Created today!
+          </span>
+          <span>
+            <i class="user icon"></i>
+            75 Contributors
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="image">
+          <img src="/images/map_placeholder.jpg">
+        </div>
+        <div class="content">
+          <div class="header">I'm a cool map</div>
+          <div class="meta">
+            <a>Friends</a>
+          </div>
+          <div class="description">
+            This is a map of the coolest things.
+          </div>
+        </div>
+        <div class="extra content">
+          <span class="right floated">
+            Created today!
+          </span>
+          <span>
+            <i class="user icon"></i>
+            75 Contributors
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="image">
+          <img src="/images/map_placeholder.jpg">
+        </div>
+        <div class="content">
+          <div class="header">I'm a cool map</div>
+          <div class="meta">
+            <a>Friends</a>
+          </div>
+          <div class="description">
+            This is a map of the coolest things.
+          </div>
+        </div>
+        <div class="extra content">
+          <span class="right floated">
+            Created today!
+          </span>
+          <span>
+            <i class="user icon"></i>
+            75 Contributors
+          </span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="image">
+          <img src="/images/map_placeholder.jpg">
         </div>
         <div class="content">
           <div class="header">I'm a cool map</div>
@@ -98,23 +200,7 @@
     </div>
   </div>
 
-  <div class="ui inverted vertical footer segment">
-    <div class="ui container">
-      <div class="ui stackable inverted divided equal height stackable grid">
-        <div class="four wide column">
-          <h4 class="ui inverted header">About</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Sitemap</a>
-            <a href="#" class="item">Contact Us</a>
-          </div>
-        </div>
-        <div class="twelve wide column">
-          <h4 class="ui inverted header">Footer Header</h4>
-          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <% include partials/_footer %>
 </div>
 
 </body>
