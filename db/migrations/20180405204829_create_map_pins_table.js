@@ -3,8 +3,8 @@ exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.withSchema('public').createTable('map_pins', function(table) {
       table.increments();
-      table.integer('user_id').unsigned();
-      table.foreign('user_id').references('users.id');
+      table.integer('created_by').unsigned();
+      table.foreign('created_by').references('users.id');
       table.integer('map_id').unsigned();
       table.foreign('map_id').references('maps.id');
       table.string('place_id');
