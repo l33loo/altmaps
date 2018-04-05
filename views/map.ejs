@@ -4,23 +4,30 @@
   <head>
     <title>Altmaps - Profile</title>
 
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
+    <% include partials/_styles-and-scripts %>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
   </head>
 
   <body>
-    <nav> <% include partials/_header %> </nav>
-    <!-- selected map -->
-    <h2><!-- map title --></h2>
-    <div><!-- description of map? --></div>
-    <h3><!-- Pins list --></h3>
-    <ul>
-      <li> <!-- pins --></li>
-    </ul>
+    <nav> <% /* include partials/_header */ %> </nav>
 
+    <h2>Victoria Beaches</h2>
+    <div id="map"></div>
+    <div>My favourite beach access points, including some exciting surprises!</div>
+    <h3>Pins</h3>
+    <ul>
+      <li>Awesome pin 1</li>
+      <li>Awesome pin 2</li>
+      <li>Awesome pin 3</li>
+      <li>Awesome pin 4</li>
+    </ul>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_ZslJ7CLPYXoz9hg4Xo8YUkUaQLqNDM&callback=initMap">
+  </script>
   </body>
 </html>
