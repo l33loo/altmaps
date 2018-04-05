@@ -50,15 +50,15 @@ app.get("/maps", (req, res) => {
 
 // MAP
 app.get("/maps/:mapID", (req, res) => {
-  if (/* map exists and user authorized */) {
+  // if (/* map exists and user authorized */) {
     res.render("map");
 
   // Do we instead want to redirect to /maps with a flash error message on the page or alert?
-  } else if (/* map doesn't exist */) {
-    res.status(404).send("<html><body>This map does not exist. Please try again.</body></html>\n");
-  } else /* if user not authorized */ {
-    res.status(403).send(`<html><body>Forbidden.</body></html>\n`);
-  }
+  // } else if (/* map doesn't exist */) {
+    // res.status(404).send("<html><body>This map does not exist. Please try again.</body></html>\n");
+  // } else /* if user not authorized */ {
+  //   res.status(403).send(`<html><body>Forbidden.</body></html>\n`);
+  // }
 });
 
 // CREATE MAP (not sure how it works with Google Maps API)
@@ -77,11 +77,11 @@ app.post("/maps/new" /*or just '/maps' ? */, (req, res) => {
 
 // USER PROFILE
 app.get("/users/:userID", (req, res) => {
-  if (/* userID exists*/) {
+  // if (/* userID exists*/) {
     res.render("user");
-  } else {
-    res.status(404).send("<html><body>This user does not exist. Please try again.</body></html>\n");
-  }
+  // } else {
+  //   res.status(404).send("<html><body>This user does not exist. Please try again.</body></html>\n");
+  // }
 });
 
 // EDIT USER PROFILE via AJAX (app.js) (PUT "/users/:userID");

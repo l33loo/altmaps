@@ -4,27 +4,25 @@
   <header>
     <h1><a href="/">AltMaps</a></h1>
 
-    <% if (<!-- user logged in --> ) { %>
+    <!-- <% if (user logged in) { %> -->
 
-      <p> Logged in as <b><%= <!-- user --> %></b><p>
+      <!-- <p> Logged in as <b><%=  %></b><p> -->
 
       <form action="/logout" method="POST" style="margin:10px">
         <input type="submit" value="Logout">
       </form>
-    <% } else { %>
-      <p>
+    <!-- <% } else { %> -->
 
         <!-- login form in navbar? -->
-      <form action="/login" method="POST" style="margin:100px">
-        <div><label for="user">Username:</label>
-        <input id="user" type="text" name="user" style="width: 300px"></div>
-        <div><label for="password">Password:</label>
-        <input id="password" type="password" name="password" style="width: 300px"></div>
-        <input type="submit" value="Login">
-      </form>
+    <form action="/maps" method="POST" style="margin:100px">
+      <div><label for="user">Username:</label>
+      <input type="text" name="user" style="width: 300px"></div>
+      <div><label for="password">Password:</label>
+      <input type="password" name="password" style="width: 300px"></div>
+      <input type="submit" value="Login">
+    </form>
 
-        <div><a href="/register">Register</a></div>
-      </p>
-    <% } %>
+      <div><a href="/register">Register</a></div>
+    <!-- <% } %> -->
   </header>
 </html>
