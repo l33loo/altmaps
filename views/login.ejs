@@ -7,52 +7,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>View Map - Altmaps</title>
+  <title>Login - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
-  <link rel="stylesheet" href="/styles/map.css" type="text/css" />
-
-
 
 </head>
 
   <body>
-    <% var active = {home: "", maps: "active", profile: ""};
+    <% var active = {home: "", maps: "", profile: ""};
         var hidden = "hidden"; %>
     <% include partials/_header %>
-
-
 
     <!-- Page Contents -->
     <div class="pusher">
 
       <div class="ui inverted vertical masthead center aligned segment small">
+
         <% include partials/_top_nav %>
       </div>
 
       <div class="ui container segment">
-        <div class="ui grid">
-          <div class="ten wide column">
-            <h2>Victoria Beaches</h2>
-            <div id="map"></div>
+        <form action="/login" method="POST"class="ui form">
+          <div class="field">
+            <label>Email</label>
+            <input type="text" name="email" placeholder="you@...">
           </div>
-          <div class="six wide column">
-          <div>My favourite beach access points, including some exciting surprises!</div>
-            <h3>Pins</h3>
-            <div id="pins-list" class="ui list">
-
-            </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter Password">
           </div>
-        </div>
+          <button class="ui button" type="submit">Submit</button>
+        </form>
       </div>
 
       <% include partials/_footer %>
 
     </div>
 
-
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_ZslJ7CLPYXoz9hg4Xo8YUkUaQLqNDM&callback=initMap">
-  </script>
   </body>
 </html>

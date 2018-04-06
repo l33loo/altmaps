@@ -210,5 +210,4 @@ initMap = function() {
 
 $(document).ready(function(){
 
-
 });

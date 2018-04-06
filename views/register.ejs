@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>View Map - Altmaps</title>
+  <title>Register - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
 
@@ -18,44 +18,38 @@
         var hidden = "hidden"; %>
     <% include partials/_header %>
 
-
-    <!-- Sidebar Menu -->
-    <div class="ui vertical inverted sidebar menu">
-        <% include partials/_nav %>
-      <a class="item">Login</a>
-      <a class="item">Signup</a>
-    </div>
-
     <!-- Page Contents -->
     <div class="pusher">
 
       <div class="ui inverted vertical masthead center aligned segment small">
-
-        <div class="ui container">
-          <div class="ui large secondary inverted pointing menu">
-            <a class="toc item">
-              <i class="sidebar icon"></i>
-            </a>
-              <% include partials/_nav %>
-            <div class="right item">
-              <a class="ui inverted button">Log in</a>
-              <a class="ui inverted button">Sign Up</a>
-            </div>
-          </div>
-        </div>
+        <% include partials/_top_nav %>
       </div>
 
       <div class="ui container segment">
-        <h1> Your Form Here! </h1>
+        <form action="/login" method="POST"class="ui form">
+          <div class="field">
+            <label>Email</label>
+            <input type="text" name="email" placeholder="you@...">
+          </div>
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" name="first-name" placeholder="First Name">
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" name="last-name" placeholder="Last Name">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter Password">
+          </div>
+          <button class="ui button" type="submit">Submit</button>
+        </form>
       </div>
 
       <% include partials/_footer %>
 
     </div>
 
-
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_ZslJ7CLPYXoz9hg4Xo8YUkUaQLqNDM&callback=initMap">
-  </script>
   </body>
 </html>

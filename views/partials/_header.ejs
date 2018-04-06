@@ -2,13 +2,36 @@
 <div class="ui large top fixed <%= hidden %> menu">
   <div class="ui container">
       <% include _nav %>
+
     <div class="right menu">
+      <% if(loggedIn) { %>
+        <div class="item">
+          <div>Welcome Back <%= userId %></div>
+        </div>
+        <form action="/logout" method="POST" >
+          <button class="ui button" type="submit">Log Out</button>
+        </form>
+      <% } else { %>
       <div class="item">
         <a class="ui button">Log in</a>
       </div>
       <div class="item">
         <a class="ui primary button">Sign Up</a>
       </div>
+      <% } %>
     </div>
   </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+    <% include _nav %>
+  <% if(loggedIn) { %>
+    <form action="/logout" method="POST" >
+      <button class="item" type="submit">Log Out</button>
+    </form>
+  <% } else { %>
+  <a class="item" href="/login" >Login</a>
+  <a class="item" href="/register" >Signup</a>
+  <% } %>
 </div>

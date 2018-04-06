@@ -21,37 +21,18 @@ var hidden = "hidden";  %>
 <% include partials/_header %>
 
 
-<!-- Sidebar Menu -->
-<div class="ui vertical inverted sidebar menu">
-    <% include partials/_nav %>
-  <a class="item">Login</a>
-  <a class="item">Signup</a>
-</div>
-
-
 <!-- Page Contents -->
 <div class="pusher">
   <div class="ui inverted vertical masthead center aligned segment">
 
-    <div class="ui container">
-      <div class="ui large secondary inverted pointing menu">
-        <a class="toc item">
-          <i class="sidebar icon"></i>
-        </a>
-          <% include partials/_nav %>
-        <div class="right item">
-          <a class="ui inverted button">Log in</a>
-          <a class="ui inverted button">Sign Up</a>
-        </div>
-      </div>
-    </div>
+    <% include partials/_top_nav %>
 
     <div class="ui text container">
       <h1 class="ui inverted header">
         altmaps
       </h1>
       <h2>Sharing your favourite places with the world.</h2>
-      <a href="#map-cards" ><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
+      <a href="#map-cards" ><div class="ui huge primary button"><% if(loggedIn) { %>Welcome Back <%= userId %> <% } else { %>Get Started <% } %><i class="right arrow icon"></i></div></a>
     </div>
   </div>
 
