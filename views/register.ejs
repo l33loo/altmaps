@@ -1,17 +1,118 @@
 <!DOCTYPE html>
 
-<html lang="en">
-  <head>
-    <Title>TinyApp: Registration</title>
-  </head>
-  <body style="font-size:20px; padding:50px">
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>View Map - Altmaps</title>
+
+  <% include partials/_styles-and-scripts %>
+
+</head>
+
+  <body>
+    <% var active = {home: "", maps: "", profile: ""};
+        var hidden = "hidden"; %>
+
     <% include partials/_header %>
-    <form action="/register" method="POST" style="margin:100px;">
-        <label for="email">Enter your email:</label>
-        <input id="email" type="email" name="email" placeholder="user@host.com" style="width: 300px">
-        <label for="password">Enter a password:</label>
-        <input id="password" type="password" name="password" style="width: 300px">
-        <input type="submit" value="Register">
-      </form>
+
+    <!-- Sidebar Menu -->
+    <div class="ui vertical inverted sidebar menu">
+        <% include partials/_nav %>
+      <a class="item">Login</a>
+      <a class="item">Signup</a>
+    </div>
+
+        <!-- Page Contents -->
+    <div class="pusher">
+
+      <div class="ui inverted vertical masthead center aligned segment small">
+
+        <div class="ui container">
+          <div class="ui large secondary inverted pointing menu">
+            <a class="toc item">
+              <i class="sidebar icon"></i>
+            </a>
+              <% include partials/_nav %>
+            <div class="right item">
+              <a class="ui inverted button">Log in</a>
+              <a class="ui inverted button">Sign Up</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui container segment">
+        <h1>Registration 🦄</h1>
+
+        <form>
+        <div class="ui section divider"></div>
+
+          <div class="fields">
+            <div class="ui form">
+              <div class="two fields">
+
+                <div class="field">
+                  <div class="two wide column">
+                    <div class="ui left input">
+                      <input type="first-name" name="first-name" placeholder="First Name">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="two wide column">
+                    <div class="ui left input">
+                      <input type="last-name" name="last-name" placeholder="Last Name">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="two wide column">
+                    <div class="ui left input">
+                      <input type="username" name="username" placeholder="Username">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="two wide column">
+                    <div class="ui left input">
+                      <input type="password" name="password" placeholder="Password">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div id="terms" class="ui checkbox">
+            <input type="checkbox" name="example">
+            <label>I agree to the Terms and Conditions</label>
+          </div>
+
+          <div class="ui hidden divider"></div>
+
+          <div id="submit" class="ui fluid large teal submit button">Login</div>
+
+        </div>
+
+        </form>
+
+    </div>
+
+      <% include partials/_footer %>
+
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_ZslJ7CLPYXoz9hg4Xo8YUkUaQLqNDM&callback=initMap">
+  </script>
+
+  <script type="text/javascript" src="/scripts/register.js"></script>
+
   </body>
 </html>

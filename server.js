@@ -96,6 +96,7 @@ app.post("/register", (req, res) => {
   // 1. email/username already registered
   // 2. Invalid email/username
   // 3. Invalid password
+  res.render("maps")
 });
 
 // LOGIN via AJAX (app.js); login form in nav bar;
