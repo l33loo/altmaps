@@ -1,3 +1,5 @@
+// require('dotenv').config();
+// const knex        = require("knex")(knexConfig[ENV]);
 // We don't want this for now.
 
 // $(() => {
@@ -149,31 +151,32 @@ initMap = function() {
   }
 
   function postPin(pin) {
-    $(pin).on('submit', function(event) {
-      event.preventDefault();
-      var data = [
-        {created_by: req.session.user_id},
-        {map_id: currentMap.mapId},
+    // $(pin).on('submit', function(event) {
+      // event.preventDefault();
+      var data = {
+        created_by: 1,
+        map_id: currentMap.mapId,
 
         // Or {latitude: req.body.lat},?
-        {latitude: $(this).lat},
+        latitude: pin.position.lat(),
 
         // Or {longitude: req.body.lng},?
-        {longitude: $(this).lng},
+        longitude: pin.position.lng(),
 
         // Or {title: $(req.body.title).serialize()},?
-        {title: 'boo' /*$(this.title).serialize()*/},
+        title: pin.title /*$(this.title).serialize()*/,
 
         // Or {title: $(req.body.description).serialize()},?
-        {description: 'boo' /*$(this.description).serialize()*/},
+        description: 'boo' /*$(this.description).serialize()*/
 
         // {category: req.body.category}?
         // color:
-      ];
-      $.post("/maps/:mapID", data).done(function() {
-        knex("map_pins").insert(data).then;
+      };
+      console.log('data: ', data);
+      $.post("/maps/" + currentMap.mapId, data).done(function() {
+
         getPins();
-      });
+      // });
     });
   }
 
@@ -192,15 +195,16 @@ initMap = function() {
 
   google.maps.event.addListener(currentMap.map, 'click', function(event) {
     // console.log('map clicked');
+    console.log(event.latLng);
     var marker = new google.maps.Marker({
-      position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
+      position: event.latLng,
       title: 'foo',
       draggable: true,
       map: currentMap.map
     });
     marker.setMap(currentMap.map);
-    console.log(event.latLng.lng());
-// postPin(marker);
+    // console.log(event.latLng);
+    postPin(marker);
   });
 }
 

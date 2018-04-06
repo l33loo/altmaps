@@ -45,7 +45,24 @@ module.exports = (knex) => {
   // EDIT MAP via AJAX (PUT "/:mapID") (router.js);
   // when session === maps.userID, in map.ejs
 
-  // CREATE PIN (not sure how it works with Google Maps API). AJAX?
+
+  router.post("/:mapID" /*or just '' ? */, (req, res) => {
+    //if (user logged in)...
+    knex("map_pins").insert({
+
+      //created_by: req.session.user_id?
+      created_by: Number(req.body.created_by),
+      map_id: Number(req.body.map_id),
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+      title: req.body.title,
+      description: req.body.description
+    })
+    .then(res.status(201).send())
+    .catch(function(err) {
+      console.error(err);
+    });
+  });
 
   return router;
 }
