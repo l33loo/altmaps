@@ -5,10 +5,11 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
-  router.get("/", (req, res) => {
+  router.get("/maps/:id", (req, res) => {
     knex
       .select("*")
-      .from("users")
+      .from("map_pins")
+      .where({map_id: req.params.id})
       .then((results) => {
         res.json(results);
     });
