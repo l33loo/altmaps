@@ -58,11 +58,11 @@ currentMap.styles = [
   }
 ];
 
-currentMap.pins = [{lat: 48.4064791, lng: -123.3735108, title: "I am a beach", description: "This is the first place I clicked", createdBy: "Andrew"},
-{lat: 48.4335921, lng: -123.3123138, title: "Willows Beach", description: "Awesome swimming!!1", createdBy: "Andrew"},
-{lat: 48.463765, lng: -123.280170, title: "Telegraph Cove", description: "So romantic! Awww", createdBy: "Andrew"},
-{lat: 48.4555994, lng: -123.350961, title: "Water Feature", description: "Surprise, it's not actually a beach! Do not swim in the water features!", createdBy: "Andrew"},
-{lat: 48.4465182, lng: -123.4077808, title: "That Beach on The Gorge", description: "Secluded Solitude, rewards await the adventurous swimmer", createdBy: "Andrew"}];
+// currentMap.pins = [{lat: 48.4064791, lng: -123.3735108, title: "I am a beach", description: "This is the first place I clicked", createdBy: "Andrew"},
+// {lat: 48.4335921, lng: -123.3123138, title: "Willows Beach", description: "Awesome swimming!!1", createdBy: "Andrew"},
+// {lat: 48.463765, lng: -123.280170, title: "Telegraph Cove", description: "So romantic! Awww", createdBy: "Andrew"},
+// {lat: 48.4555994, lng: -123.350961, title: "Water Feature", description: "Surprise, it's not actually a beach! Do not swim in the water features!", createdBy: "Andrew"},
+// {lat: 48.4465182, lng: -123.4077808, title: "That Beach on The Gorge", description: "Secluded Solitude, rewards await the adventurous swimmer", createdBy: "Andrew"}];
 
 
 // callback function called by maps API on map load.
@@ -70,61 +70,25 @@ initMap = function() {
 
   function returnBounds(){
     // sw is minimum longitude, minimum latitude
-    var bounds = {east: currentMap.pins[0].lng, north: currentMap.pins[0].lat, south: currentMap.pins[0].lat, west: currentMap.pins[0].lng};
+    var bounds = {east: currentMap.pins[0].longitude, north: currentMap.pins[0].latitude, south: currentMap.pins[0].latitude, west: currentMap.pins[0].longitude};
 
     currentMap.pins.forEach(function(pin){
-      if(pin.lat < bounds.south){
-        bounds.south = pin.lat;
+      if(pin.latitude < bounds.south){
+        bounds.south = pin.latitude;
       }
-      if(pin.lng > bounds.east){
-        bounds.east = pin.lng;
+      if(pin.longitude > bounds.east){
+        bounds.east = pin.longitude;
       }
-      if(pin.lat > bounds.north){
-        bounds.north = pin.lat;
+      if(pin.latitude > bounds.north){
+        bounds.north = pin.latitude;
       }
-      if(pin.lng < bounds.west){
-        bounds.west = pin.lng;
+      if(pin.longitude < bounds.west){
+        bounds.west = pin.longitude;
       }
 
     });
     return bounds;
   }
-
-
-  currentMap.map = new google.maps.Map($('#map')[0], {
-    zoom: 12,
-    center: {lat: currentMap.pins[0].lat, lng: currentMap.pins[0].lng},
-    styles: currentMap.styles
-  });
-
-  console.dir(returnBounds());
-  currentMap.map.fitBounds(returnBounds());
-
-  currentMap.infoWindow = new google.maps.InfoWindow();
-  currentMap.markers = [];
-  currentMap.pins.forEach(function(pin){
-    var newMarker = new google.maps.Marker({
-      position: {lat: pin.lat, lng: pin.lng},
-      title: pin.title,
-      draggable: true,
-      map: currentMap.map
-    });
-
-    google.maps.event.addListener(newMarker, 'click', function() {
-      currentMap.infoWindow.close();
-      currentMap.infoWindow.setContent(pin.description);
-      currentMap.infoWindow.open(currentMap.map, newMarker);
-    });
-
-    currentMap.markers.push(newMarker);
-  });
-
-}
-
-
-
-
-$(document).ready(function(){
 
   function createPlaceListItem(title, description){
     var $item = $('<div class="item">');
@@ -140,11 +104,80 @@ $(document).ready(function(){
 
     places.forEach(function(place){
       createPlaceListItem(place.title, place.description).appendTo($parent);
-      console.log("adding place " + place.title);
     });
 
   }
 
-  populatePlaceList(currentMap.pins, $('#pins-list'));
+
+
+  function getMapId(){
+    var pathname = window.location.pathname;
+    var regex = /maps\/(\d+)\/?\b/;
+    var mapId = regex.exec(pathname);
+    return mapId[1];
+  }
+
+  function getPins(){
+    $.getJSON("/maps/" + currentMap.mapId + "/json").then(function(pins){
+      currentMap.pins = pins;
+      currentMap.pins.forEach(function(pin){
+        // convert coordinates to numbers.
+        pin.latitude = Number(pin.latitude);
+        pin.longitude = Number(pin.longitude);
+        var newMarker = new google.maps.Marker({
+          position: {lat: pin.latitude, lng: pin.longitude},
+          title: pin.title,
+          draggable: true,
+          map: currentMap.map
+        });
+
+        google.maps.event.addListener(newMarker, 'click', function() {
+          currentMap.infoWindow.close();
+          currentMap.infoWindow.setContent(pin.description);
+          currentMap.infoWindow.open(currentMap.map, newMarker);
+        });
+
+        currentMap.markers.push(newMarker);
+      });
+
+      populatePlaceList(currentMap.pins, $('#pins-list'));
+
+      currentMap.map.fitBounds(returnBounds());
+
+    })
+    .catch(function(err){
+      console.log("Error getting pins", err);
+    });
+  }
+
+  currentMap.mapId = getMapId();
+
+
+  currentMap.map = new google.maps.Map($('#map')[0], {
+    zoom: 12,
+    center: {lat: 48.4335921, lng: -123.3123138},
+    styles: currentMap.styles
+  });
+
+
+
+  currentMap.infoWindow = new google.maps.InfoWindow();
+  currentMap.markers = [];
+
+  getPins();
+
+
+
+
+
+
+}
+
+
+
+
+$(document).ready(function(){
+
+
 
 });
