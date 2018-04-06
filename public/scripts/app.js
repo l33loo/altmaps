@@ -162,16 +162,16 @@ initMap = function() {
         {longitude: $(this).lng},
 
         // Or {title: $(req.body.title).serialize()},?
-        {title: $(this.title).serialize()},
+        {title: 'boo' /*$(this.title).serialize()*/},
 
         // Or {title: $(req.body.description).serialize()},?
-        {description: $(this.description).serialize()},
+        {description: 'boo' /*$(this.description).serialize()*/},
 
         // {category: req.body.category}?
         // color:
       ];
       $.post("/maps/:mapID", data).done(function() {
-        knex("map_pins").insert(data);
+        knex("map_pins").insert(data).then;
         getPins();
       });
     });
@@ -185,30 +185,26 @@ initMap = function() {
     styles: currentMap.styles
   });
 
-google.maps.event.addListener(currentMap.map, 'click', function() {
-  var marker = new google.maps.Marker({
-    lat: event.latLng.lat();
-    lng: event.latLng.lng();
-  });
-  postPin(marker);
-
-});
-
   currentMap.infoWindow = new google.maps.InfoWindow();
   currentMap.markers = [];
 
   getPins();
 
-
-
-
+  google.maps.event.addListener(currentMap.map, 'click', function(event) {
+    // console.log('map clicked');
+    var marker = new google.maps.Marker({
+      position: {lat: event.latLng.lat(), lng: event.latLng.lng()},
+      title: 'foo',
+      draggable: true,
+      map: currentMap.map
+    });
+    marker.setMap(currentMap.map);
+    console.log(event.latLng.lng());
+// postPin(marker);
+  });
 }
 
-
-
-
 $(document).ready(function(){
-
 
 
 });
