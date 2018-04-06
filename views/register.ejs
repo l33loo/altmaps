@@ -22,23 +22,7 @@
     <div class="pusher">
 
       <div class="ui inverted vertical masthead center aligned segment small">
-
-        <div class="ui container">
-          <div class="ui large secondary inverted pointing menu">
-            <a class="toc item">
-              <i class="sidebar icon"></i>
-            </a>
-              <% include partials/_nav %>
-            <div class="right item">
-              <form action="/login" method="POST" class="ui form nav-bar hidden">
-                <input type="text" name="email" placeholder="you@...">
-                <input type="password" name="password" placeholder="Enter Password">
-              </form>
-              <a id="login-button" class="ui inverted button">Log in</a>
-              <a class="ui inverted button" href="/register">Sign Up</a>
-            </div>
-          </div>
-        </div>
+        <% include partials/_top_nav %>
       </div>
 
       <div class="ui container segment">

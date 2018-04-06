@@ -87,7 +87,19 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login", {loggedIn: req.loggedIn, userId: req.session.userId});
+  if(req.loggedIn){
+    res.redirect("/");
+  } else {
+    res.render("login", {loggedIn: req.loggedIn, userId: req.session.userId});
+  }
+});
+
+app.get("/register", (req, res) => {
+  if(req.loggedIn){
+    res.redirect("/");
+  } else {
+    res.render("register", {loggedIn: req.loggedIn, userId: req.session.userId});
+  }
 });
 
 app.post("/register", (req, res) => {

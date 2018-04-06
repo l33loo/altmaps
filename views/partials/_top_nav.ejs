@@ -1,0 +1,18 @@
+<div class="ui container">
+  <div class="ui large secondary inverted pointing menu">
+    <a class="toc item">
+      <i class="sidebar icon"></i>
+    </a>
+      <% include _nav %>
+    <div class="right item">
+      <% if(loggedIn) { %>
+        <form action="/logout" method="POST" >
+          <button class="ui inverted button" type="submit">Log Out</button>
+        </form>
+      <% } else { %>
+        <a class="ui inverted button" href="/login" >Log in</a>
+        <a class="ui inverted button" href="/register" >Sign Up</a>
+      <% } %>
+    </div>
+  </div>
+</div>

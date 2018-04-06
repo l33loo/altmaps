@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Add a Map - Altmaps</title>
+  <title>Login - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
 
@@ -22,25 +22,10 @@
     <div class="pusher">
 
       <div class="ui inverted vertical masthead center aligned segment small">
-
-        <div class="ui container">
-          <div class="ui large secondary inverted pointing menu">
-            <a class="toc item">
-              <i class="sidebar icon"></i>
-            </a>
-              <% include partials/_nav %>
-            <div class="right item">
-              <form action="/login" method="POST" class="ui form nav-bar hidden">
-                <input type="text" name="email" placeholder="you@...">
-                <input type="password" name="password" placeholder="Enter Password">
-              </form>
-              <a id="login-button" class="ui inverted button">Log in</a>
-              <a class="ui inverted button" href="/register">Sign Up</a>
-            </div>
-          </div>
-        </div>
+        <% include partials/_top_nav %>
       </div>
 
+      <% if(loggedIn) { %>
       <div class="ui container segment">
         <form action="/login" method="POST"class="ui form">
           <div class="field">
@@ -54,7 +39,11 @@
           <button class="ui button" type="submit">Submit</button>
         </form>
       </div>
-
+      <% } else { %>
+        <div class="ui container segment">
+          Please login to add maps
+        </div>
+      <% } %>
       <% include partials/_footer %>
 
     </div>
