@@ -25,7 +25,7 @@ module.exports = (knex) => {
   router.get("/new", (req, res) => {
     res.render("create_map", {loggedIn: req.loggedIn, userId: req.session.userId});
   });
-  
+
   // MAP
   router.get("/:mapID", (req, res) => {
     // if (/* map exists and user authorized */) {
@@ -41,8 +41,21 @@ module.exports = (knex) => {
 
 
   router.post("/new" /*or just '' ? */, (req, res) => {
-    // ...?
-    res.redirect("/:mapID");
+    knex("maps").insert({
+
+      created_by: req.session.userId,
+      title: req.body.title,
+      category: req.body.description
+    }).returning("id")
+    .then(function(response){
+      console.log(response)
+      res.redirect("../")
+    })
+    .catch(function(err) {
+      console.error(err);
+      res.redirect("/");
+    });
+
   });
 
   // EDIT MAP via AJAX (PUT "/:mapID") (router.js);
