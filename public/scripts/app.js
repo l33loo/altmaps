@@ -150,6 +150,35 @@ initMap = function() {
     });
   }
 
+  function postPin(pin) {
+    $(pin).on('submit', function(event) {
+      event.preventDefault();
+      const data = [
+        {created_by: req.session.user_id},
+        {map_id: req.params.mapID},
+
+        // Or {latitude: req.body.lat},?
+        {latitude: $(this).position.lat},
+
+        // Or {longitude: req.body.lng},?
+        {longitude: $(this).position.lng},
+
+        // Or {title: $(req.body.title).serialize()},?
+        {title: $(this.title).serialize()},
+
+        // Or {title: $(req.body.description).serialize()},?
+        {description: $(this.description).serialize()},
+
+        // {category: req.body.category}?
+        // color:
+      ];
+      $.post("/maps/:mapID", data).done(function() {
+        knex("map_pins").insert(data);
+        getPins();
+      });
+    });
+  }
+
   currentMap.mapId = getMapId();
 
 
