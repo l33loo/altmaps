@@ -36,7 +36,7 @@ module.exports = (knex) => {
 
   // CREATE MAP (not sure how it works with Google Maps API)
   router.get("/new", (req, res) => {
-    // res.render... ?
+    res.render("create_map", {loggedIn: req.loggedIn, userId: req.session.userId});
   });
   router.post("/new" /*or just '' ? */, (req, res) => {
     // ...?

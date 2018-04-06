@@ -39,6 +39,7 @@ app.use(cookieSession({
 
 // checks session and if valid sets req.userLoggedIn = true (or false if not logged in)
 app.use((req, res, next) => {
+  console.log(`req.session.userId is ${req.session.userId}`);
   if(req.session.userId){
     req.loggedIn = true;
   } else {
@@ -86,7 +87,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", {loggedIn: req.loggedIn, userId: req.session.userId});
 });
 
 app.post("/register", (req, res) => {

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>View Map - Altmaps</title>
+  <title>Login - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
 
@@ -17,14 +17,6 @@
     <% var active = {home: "", maps: "", profile: ""};
         var hidden = "hidden"; %>
     <% include partials/_header %>
-
-
-    <!-- Sidebar Menu -->
-    <div class="ui vertical inverted sidebar menu">
-        <% include partials/_nav %>
-      <a class="item">Login</a>
-      <a class="item">Signup</a>
-    </div>
 
     <!-- Page Contents -->
     <div class="pusher">
@@ -67,9 +59,5 @@
 
     </div>
 
-
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_ZslJ7CLPYXoz9hg4Xo8YUkUaQLqNDM&callback=initMap">
-  </script>
   </body>
 </html>
