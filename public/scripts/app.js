@@ -187,8 +187,8 @@ initMap = function() {
 
 google.maps.event.addListener(currentMap.map, 'click', function() {
   var marker = new google.maps.Marker({
-    lat: event.latLng.lat();
-    lng: event.latLng.lng();
+    lat: event.latLng.lat(),
+    lng: event.latLng.lng()
   });
   postPin(marker);
 
@@ -208,7 +208,5 @@ google.maps.event.addListener(currentMap.map, 'click', function() {
 
 
 $(document).ready(function(){
-
-
 
 });

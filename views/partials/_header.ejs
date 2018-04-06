@@ -2,13 +2,23 @@
 <div class="ui large top fixed <%= hidden %> menu">
   <div class="ui container">
       <% include _nav %>
+
     <div class="right menu">
+      <% if(loggedIn) { %>
+        <div class="item">
+          <div>Welcome Back <%= userId %></div>
+        </div>
+        <div class="item">
+          <a class="ui button" href="/logout">Log Out</a>
+        </div>
+      <% } else { %>
       <div class="item">
         <a class="ui button">Log in</a>
       </div>
       <div class="item">
         <a class="ui primary button">Sign Up</a>
       </div>
+      <% } %>
     </div>
   </div>
 </div>

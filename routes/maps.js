@@ -17,13 +17,14 @@ module.exports = (knex) => {
 
   // MAPS
   router.get("", (req, res) => {
-    res.render("index");
+    console.log("req.loggedIn: ", req.loggedIn);
+    res.render("index", {loggedIn: req.loggedIn, userId: req.session.userId});
   });
 
   // MAP
   router.get("/:mapID", (req, res) => {
     // if (/* map exists and user authorized */) {
-      res.render("map");
+      res.render("map", {loggedIn: req.loggedIn, userId: req.session.userId});
 
     // Do we instead want to redirect to  with a flash error message on the page or alert?
     // } else if (/* map doesn't exist */) {

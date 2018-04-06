@@ -40,8 +40,12 @@ var hidden = "hidden";  %>
         </a>
           <% include partials/_nav %>
         <div class="right item">
+          <% if(loggedIn) { %>
+          <a class="ui inverted button" href="/logout">Log Out</a>
+          <% } else { %>
           <a class="ui inverted button">Log in</a>
           <a class="ui inverted button">Sign Up</a>
+          <% } %>
         </div>
       </div>
     </div>
@@ -51,7 +55,7 @@ var hidden = "hidden";  %>
         altmaps
       </h1>
       <h2>Sharing your favourite places with the world.</h2>
-      <a href="#map-cards" ><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
+      <a href="#map-cards" ><div class="ui huge primary button"><% if(loggedIn) { %>Welcome Back <%= userId %> <% } else { %>Get Started <% } %><i class="right arrow icon"></i></div></a>
     </div>
   </div>
 

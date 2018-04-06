@@ -65,6 +65,16 @@
   display: none;
 }
 
+form.ui.form.nav-bar input {
+  width: 45%;
+  font-size: 0.75em;
+
+}
+
+form.ui.form.nav-bar.hidden {
+  display: none;
+}
+
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {
     display: none !important;
