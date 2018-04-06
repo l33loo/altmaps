@@ -133,7 +133,9 @@ initMap = function() {
 
         google.maps.event.addListener(newMarker, 'click', function() {
           currentMap.infoWindow.close();
-          currentMap.infoWindow.setContent(pin.description);
+          var pinInfo = '<div id="infoWin">' +
+            '<h1>' + pin.title
+          currentMap.infoWindow.setContent(pinInfo);
           currentMap.infoWindow.open(currentMap.map, newMarker);
         });
 
@@ -159,8 +161,6 @@ initMap = function() {
 
         // Or {latitude: req.body.lat},?
         latitude: pin.position.lat(),
-
-        // Or {longitude: req.body.lng},?
         longitude: pin.position.lng(),
 
         // Or {title: $(req.body.title).serialize()},?
