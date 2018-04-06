@@ -108,8 +108,6 @@ initMap = function() {
 
   }
 
-
-
   function getMapId(){
     var pathname = window.location.pathname;
     var regex = /maps\/(\d+)\/?\b/;
@@ -153,15 +151,15 @@ initMap = function() {
   function postPin(pin) {
     $(pin).on('submit', function(event) {
       event.preventDefault();
-      const data = [
+      var data = [
         {created_by: req.session.user_id},
-        {map_id: req.params.mapID},
+        {map_id: currentMap.mapId},
 
         // Or {latitude: req.body.lat},?
-        {latitude: $(this).position.lat},
+        {latitude: $(this).lat},
 
         // Or {longitude: req.body.lng},?
-        {longitude: $(this).position.lng},
+        {longitude: $(this).lng},
 
         // Or {title: $(req.body.title).serialize()},?
         {title: $(this.title).serialize()},
@@ -181,21 +179,25 @@ initMap = function() {
 
   currentMap.mapId = getMapId();
 
-
   currentMap.map = new google.maps.Map($('#map')[0], {
     zoom: 12,
     center: {lat: 48.4335921, lng: -123.3123138},
     styles: currentMap.styles
   });
 
+google.maps.event.addListener(currentMap.map, 'click', function() {
+  var marker = new google.maps.Marker({
+    lat: event.latLng.lat();
+    lng: event.latLng.lng();
+  });
+  postPin(marker);
 
+});
 
   currentMap.infoWindow = new google.maps.InfoWindow();
   currentMap.markers = [];
 
   getPins();
-
-
 
 
 
