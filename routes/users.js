@@ -7,7 +7,7 @@ module.exports = (knex) => {
 
   router.get("/:id/fav/json", (req, res) => {
     knex
-      .select("title")
+      .select("title", "description", "map_id")
       .from("favorite_maps")
       .leftOuterJoin("maps", "favorite_maps.map_id", "maps.id")
       .where({user_id: req.params.id})
@@ -19,7 +19,7 @@ module.exports = (knex) => {
   // Doesn't work because created_by exists in bpth maps and map_pins table (so does title)
   router.get("/:id/contrib/json", (req, res) => {
     knex
-      .select("title")
+      .select("title", "description", "map_id")
       .from("map_pins")
       .leftOuterJoin("maps", "map_pins.map_id", "maps.id")
       .where({created_by: req.params.id})

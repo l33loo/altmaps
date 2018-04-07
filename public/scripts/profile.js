@@ -1,5 +1,25 @@
 $(document).ready(function() {
 
+  // function createPlaceListItem(title, description){
+  //   var $item = $('<div class="item">');
+  //   var $icon = $('<i class="map marker icon">').appendTo($item);
+  //   var $content = $('<div class="content">').appendTo($item);
+  //   var $title = $('<a class="header">').text(title).appendTo($content);
+  //   var $description = $('<div class="description">').text(description).appendTo($content);
+
+  //   return $item;
+  // }
+
+  // function populatePlaceList(places, $parent){
+
+  //   places.forEach(function(place){
+  //     createPlaceListItem(place.title, place.description).appendTo($parent);
+  //   });
+
+  // }
+
+
+
   function getUserId() {
     var pathname = window.location.pathname;
     var regex = /users\/(\d+)\/?\b/;
@@ -9,21 +29,25 @@ $(document).ready(function() {
 
   var profileUserId = getUserId();
 
-  function createMapsList(title) {
-    var $mapTitle = $('<p>').text(title);
-    console.log($mapTitle);
-    return $mapTitle;
+  function createMapsListItem(title, description, id) {
+    var $item = $('<div class="item">');
+    var $icon = $('<i class="map marker icon">').appendTo($item);
+    var $content = $('<div class="content">').appendTo($item);
+    var $title = $('<a class="header" href="/maps/' + id + '">').text(title).appendTo($content);
+    var $description = $('<div class="description">').text(description).appendTo($content);
+
+    return $item;
   }
 
   function populateFavList(maps, $parent) {
     maps.forEach(function(map) {
-      createMapsList(map.title).appendTo($parent);
+      createMapsListItem(map.title, map.description, map.id).appendTo($parent);
     });
   }
 
   function populateContribList(maps) {
     maps.forEach(function(map) {
-      createMapsList(map.title).appendTo($parent);
+      createMapsListItem(map.title, map.description, map.id).appendTo($parent);
     });
   }
 
@@ -38,7 +62,7 @@ $(document).ready(function() {
 
   function getContrib() {
     $.getJSON("/users/" + profileUserId + "/contrib/json").then(function(maps) {
-      populateContribList(maps, $('#contrib'));
+      populateContribListItem(maps, $('#contrib'));
     })
     .catch(function(err) {
       console.log("Error getting maps", err);
