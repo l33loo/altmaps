@@ -150,6 +150,8 @@ module.exports = (knex) => {
     //if (user logged in)...
     if(req.loggedIn){
       console.log("Should be putting pin", req.params.pinID);
+
+      // there's something wrong with this query??
       knex("map_pins")
       .where("id",  req.params.pinID)
       .update({
