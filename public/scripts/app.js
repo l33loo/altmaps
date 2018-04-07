@@ -215,7 +215,7 @@ initMap = function() {
         // {category: req.body.category}?
         // color:
       };
-      console.log('data: ', data);
+      // console.log('data: ', data);
       $.post("/maps/" + currentMap.mapId, data).done(function() {
 
         getPins();
@@ -238,7 +238,7 @@ initMap = function() {
 
   google.maps.event.addListener(currentMap.map, 'click', function(event) {
     // console.log('map clicked');
-    console.log(event.latLng);
+    // console.log(event.latLng);
     var marker = new google.maps.Marker({
       position: event.latLng,
       title: 'foo',
