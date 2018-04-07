@@ -1,4 +1,19 @@
-$(document).ready(function() {
+
+  // function getUserId() {
+  //   var pathname = window.location.pathname;
+  //   var regex = /users\/(\d+)\/?\b/;
+  //   var userId = regex.exec(pathname);
+  //   return userId[1];
+  // }
+
+  //   function getMapId(){
+  //   var pathname = window.location.pathname;
+  //   var regex = /maps\/(\d+)\/?\b/;
+  //   var mapId = regex.exec(pathname);
+  //   return mapId[1];
+  // }
+
+  var profileUserId = getUserId();
 
   function createMapsList(title /*cl*/) {
     // var $list = $('<div>').addClass(cl);
@@ -23,7 +38,7 @@ $(document).ready(function() {
 
   function getFavs() {
     // "/maps/" + currentMap.mapId + "/json"
-      $.getJSON("/users/" + req.session.userId + "/fav/json").then(function(maps) {
+      $.getJSON("/users/" + profileUserId + "/fav/json").then(function(maps) {
         // console.log("maps: " + maps);
         // console.log("type of maps: " + typeof maps);
         populateFavList(maps, $('#fav'));
@@ -34,7 +49,7 @@ $(document).ready(function() {
     }
 
   function getContrib() {
-      $.getJSON("/users/" + req.session.userId + "/contrib/json").then(function(maps) {
+      $.getJSON("/users/" + profileUserId + "/contrib/json").then(function(maps) {
         populateContribList(maps, $('#contrib'));
       })
       .catch(function(err) {
@@ -42,14 +57,12 @@ $(document).ready(function() {
       });
     }
 
+  // getFavs();
 
-  getFavs();
 
-}
   // doesn;t work yet.
   // getContrib();
 
-});
 
 // <div class="ui container segment">
 //         <div class="ui segment">
