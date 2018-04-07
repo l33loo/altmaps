@@ -16,12 +16,22 @@ module.exports = (knex) => {
   });
 
   router.get("/json", (req, res) => {
-    knex
-      .select("*")
-      .from("maps")
-      .then((results) => {
-        res.json(results);
-    });
+    if(req.loggedIn){
+      // SELECT * FROM favorite_maps RIGHT JOIN maps ON favorite_maps.map_id = maps.id AND favorite_maps.user_id = 1 ORDER BY maps.id
+      //SELECT * FROM maps LEFT JOIN favorite_maps ON maps.id = favorite_maps.map_id AND favorite_maps.user_id = ?
+      knex.raw("SELECT * FROM favorite_maps RIGHT JOIN maps ON favorite_maps.map_id = maps.id AND favorite_maps.user_id = ? ORDER BY maps.id", [req.session.userId])
+        .then((results) => {
+          res.json(results.rows);
+      });
+    } else {
+      knex
+        .select("*")
+        .from("maps")
+        .then((results) => {
+          res.json(results);
+      });
+    }
+
   });
 
   // MAPS
