@@ -9,18 +9,15 @@ $(document).ready(function() {
 
   var profileUserId = getUserId();
 
-  function createMapsList(title /*cl*/) {
-    // var $list = $('<div>').addClass(cl);
+  function createMapsList(title) {
     var $mapTitle = $('<p>').text(title);
     console.log($mapTitle);
-    // return $list;
     return $mapTitle;
   }
 
   function populateFavList(maps, $parent) {
-
     maps.forEach(function(map) {
-      createMapsList(map.title /*, "fav-list"*/).appendTo($parent);
+      createMapsList(map.title).appendTo($parent);
     });
   }
 
@@ -31,31 +28,28 @@ $(document).ready(function() {
   }
 
   function getFavs() {
-    // "/maps/" + currentMap.mapId + "/json"
-      $.getJSON("/users/" + profileUserId + "/fav/json").then(function(maps) {
-        // console.log("maps: " + maps);
-        // console.log("type of maps: " + typeof maps);
-        populateFavList(maps, $('#fav'));
-      })
-      .catch(function(err) {
-        console.log("Error getting favorite maps", err);
-      });
-    }
+    $.getJSON("/users/" + profileUserId + "/fav/json").then(function(maps) {
+      populateFavList(maps, $('#fav'));
+    })
+    .catch(function(err) {
+      console.log("Error getting favorite maps", err);
+    });
+  }
 
   function getContrib() {
-      $.getJSON("/users/" + profileUserId + "/contrib/json").then(function(maps) {
-        populateContribList(maps, $('#contrib'));
-      })
-      .catch(function(err) {
-        console.log("Error getting maps", err);
-      });
-    }
+    $.getJSON("/users/" + profileUserId + "/contrib/json").then(function(maps) {
+      populateContribList(maps, $('#contrib'));
+    })
+    .catch(function(err) {
+      console.log("Error getting maps", err);
+    });
+  }
 
   getFavs();
 
-
   // doesn;t work yet.
   // getContrib();
+
 });
 
 
