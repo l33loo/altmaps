@@ -19,10 +19,11 @@ module.exports = (knex) => {
   // Doesn't work because created_by exists in bpth maps and map_pins table (so does title)
   router.get("/:id/contrib/json", (req, res) => {
     knex
-      .select("title", "description", "map_id")
+      .select("maps.title", "maps.description", "map_id")
       .from("map_pins")
       .leftOuterJoin("maps", "map_pins.map_id", "maps.id")
-      .where({created_by: req.params.id})
+      .where("map_pins.created_by", req.params.id)
+      .groupBy("maps.title", "maps.description", "map_pins.map_id")
       .then((results) => {
         res.json(results);
       });
@@ -32,7 +33,7 @@ module.exports = (knex) => {
   router.get("/:userID", (req, res) => {
     // if (exists) {
       // if (loggedIn) { //
-        res.render("user", {loggedIn: req.loggedIn, userId: req.session.userId});
+        res.render("user", {loggedIn: req.loggedIn, userId: req.session.userId, profileId: req.params.userID});
       // } else {
         // res.status(40).send -- unauthorized, need to log in
       // }

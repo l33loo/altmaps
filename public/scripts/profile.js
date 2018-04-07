@@ -39,21 +39,15 @@ $(document).ready(function() {
     return $item;
   }
 
-  function populateFavList(maps, $parent) {
+  function populateMapList(maps, $parent) {
     maps.forEach(function(map) {
-      createMapsListItem(map.title, map.description, map.id).appendTo($parent);
-    });
-  }
-
-  function populateContribList(maps) {
-    maps.forEach(function(map) {
-      createMapsListItem(map.title, map.description, map.id).appendTo($parent);
+      createMapsListItem(map.title, map.description, map.map_id).appendTo($parent);
     });
   }
 
   function getFavs() {
     $.getJSON("/users/" + profileUserId + "/fav/json").then(function(maps) {
-      populateFavList(maps, $('#fav'));
+      populateMapList(maps, $('#fav'));
     })
     .catch(function(err) {
       console.log("Error getting favorite maps", err);
@@ -62,7 +56,7 @@ $(document).ready(function() {
 
   function getContrib() {
     $.getJSON("/users/" + profileUserId + "/contrib/json").then(function(maps) {
-      populateContribListItem(maps, $('#contrib'));
+      populateMapList(maps, $('#contrib'));
     })
     .catch(function(err) {
       console.log("Error getting maps", err);
@@ -71,8 +65,7 @@ $(document).ready(function() {
 
   getFavs();
 
-  // doesn;t work yet.
-  // getContrib();
+  getContrib();
 
 });
 
