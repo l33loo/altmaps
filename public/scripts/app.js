@@ -71,18 +71,50 @@ initMap = function() {
     return bounds;
   }
 
+  function editButtonHandler(index){
+    return function(event){
+
+      event.preventDefault();
+
+      // this is the text fields, siblings to the submit button in DOM.
+      var $inputs = $(this).siblings();
+
+      // basic check to make sure values aren't empty.
+      if($inputs[0].value && $inputs[1].value){
+        putPin(currentMap.markers[index], $inputs[0].value, $inputs[1].value)
+      }
+
+    }
+  }
+
   function createPlaceListItem(title, description, placeId, index){
 
     var $item = $('<div id="list-' + placeId + '" class="item">');
     var $icon = $('<i class="map marker icon">').appendTo($item);
     var $content = $('<div class="content">').appendTo($item);
-    var $title = $('<a class="header">').text(title).appendTo($content);
+    var $header = $('<div class="header">').appendTo($content);
+    var $title = $('<a>').text(title).appendTo($header);
+    var $edit = $('<i class="edit icon">').appendTo($header);
     var $description = $('<div class="description">').text(description).appendTo($content);
 
     $title.on('click', function(){
 
       google.maps.event.trigger(currentMap.markers[index], 'click');
 
+    });
+
+    $edit.on('click', function(){
+      //edit place by replacing listing with form.
+
+      var $newContent = $('<div class="content">');
+      var $form = $('<form class="ui form">').appendTo($newContent);
+      var $formTitle = $('<input type="text" name="title" placeholder="Pin Title">').val($title.text()).appendTo($form);
+      var $formDescription = $('<input type="text" name="description" placeholder="Description">').val($description.text()).appendTo($form);
+      var $formEdit = $('<button class="ui button" type="submit">Edit</button>').appendTo($form);
+
+      $formEdit.on('click', editButtonHandler(index));
+
+      $content.replaceWith($newContent);
     });
 
     return $item;
@@ -223,6 +255,25 @@ initMap = function() {
 
         getPins();
       });
+  }
+
+  function putPin(pin, title, description) {
+    console.dir(pin);
+      var data = {
+
+        latitude: pin.position.lat(),
+        longitude: pin.position.lng(),
+        title: title,
+        description: description
+
+      };
+      console.log('data: ', data);
+      $.ajax({
+          method: "PUT",
+          url: "/maps/" + $(this).data("map-id") + "/" + pin.placeId
+        }).done( function() {
+          getPins()
+        });
   }
 
   currentMap.mapId = getMapId();
