@@ -1,32 +1,68 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html>
   <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
     <title>Altmaps - Profile</title>
 
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
+    <% include partials/_styles-and-scripts %>
   </head>
 
   <body>
     <% var active = {home: "", maps: "active", profile: ""};
         var hidden = "hidden"; %>
     <nav> <% include partials/_header %> </nav>
-    <img> <!-- profile pic -->
-    <div><!-- description of user? --></div>
-    <h3>Favorite maps</h3>
-    <ul>
-      <li> <!-- Favs --></li>
-    </ul>
-    <h3>Your maps</h3>
-    <ul>
-      <li> <!-- maps collaborated on --></li>
-    </ul>
 
+</head>
+
+  <body>
+    <% var active = {home: "", maps: "", profile: ""};
+        var hidden = "hidden"; %>
+    <% include partials/_header %>
+
+    <!-- Page Contents -->
+    <div class="pusher">
+
+      <div class="ui inverted vertical masthead center aligned segment small">
+        <% include partials/_top_nav %>
+      </div>
+
+      <% if(loggedIn) { %>
+      <div class="ui container segment">
+        <div class="ui segment">
+          <h1>Lila2's profile</h1>
+        </div>
+      <div class="ui segment">
+        <div class="ui three column very relaxed grid">
+          <div class="column">
+            <img src="/images/map_placeholder.jpg">
+            <p>This is me. I don't have much to say, but now that I think of it, let me tell you about the last burger I ate. That was a year ago. I still dream about it. But now that cows have gone extinct, there isn't much one can do aside from dreaming...</p>
+          </div>
+          <div class="ui vertical divider">
+          </div>
+          <div class="column">
+            <h2>Favorite Maps</h2>
+            <p>...</p>
+          </div>
+          <div class="column">
+            <h2>Contributor on</h2>
+            <p>...</p>
+          </div>
+        </div>
+      </div>
+      </div>
+      <% } else { %>
+      <div class="ui container segment">
+        Please login to view user profiles
+      </div>
+      <% } %>
+
+      <% include partials/_footer %>
+
+    </div>
 
   </body>
 </html>
