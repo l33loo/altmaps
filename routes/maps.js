@@ -78,11 +78,11 @@ module.exports = (knex) => {
     }
   });
 
-  router.post("/favorite", (req, res) => {
+  router.post("/:mapId/favorite", (req, res) => {
     if(req.loggedIn){
       knex("favorite_maps").insert({
         user_id: req.session.userId,
-        map_id: req.body.map_id,
+        map_id: req.params.mapId,
       })
       .then(function(){
         res.status(200).send();
@@ -94,10 +94,10 @@ module.exports = (knex) => {
     }
   });
 
-  router.delete("/favorite", (req, res) => {
+  router.delete("/:mapId/favorite", (req, res) => {
     if (req.loggedIn) {
       knex("favorite_maps")
-        .where({user_id: req.session.userId, map_id: req.body.map_id})
+        .where({user_id: req.session.userId, map_id: req.params.mapId})
         .del()
         .then(function(){
           res.status(200).send();

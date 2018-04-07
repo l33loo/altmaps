@@ -9,7 +9,7 @@ $(document).ready(function(){
 
     if(favorite !== undefined){
       var $favourite = $('<span class="right floated"></span>').appendTo($title);
-      var $heart = $('<i class="heart outline icon"></i>').appendTo($favourite);
+      var $heart = $('<i class="heart outline icon"></i>').data({mapId: id}).appendTo($favourite);
     }
     var $description = $('<div class="description">').text(description).appendTo($content);
 
@@ -20,18 +20,18 @@ $(document).ready(function(){
 
     if(favorite){
       toggleFavourite($heart);
-      $heart.data({mapId: id})
     }
+
+
     return $card;
 
   }
 
   function populateMapList(maps, $parent){
-    console.dir(maps);
     maps.forEach(function(map){
       var favorite = undefined;
       if("user_id" in map){
-        //if user_id key exists then this is for a logged in user
+        //if user_id key exists then this is for a logged in user (if user is logged in, server returns an outer join of favorites and maps, otherwise just returns maps.)
         favorite = map.user_id;
         //this will either be null, if map isn't in user's favorites, or equal to user's id.
       }
@@ -42,8 +42,7 @@ $(document).ready(function(){
 
 // toggles the "like" heart immediately in the DOM, and also updates database in background
 function toggleFavourite($favorite){
-
-  if($favorite.isFavorite){
+  if($favorite.data("is-favorite")){
     $favorite.toggleClass("outline red");
     $favorite.data({isFavorite: false});
   } else {
@@ -51,12 +50,7 @@ function toggleFavourite($favorite){
     $favorite.data({isFavorite: true});
   }
 
-  console.log($favorite.data().mapId);
-  // $favourite.append('<div class="ui red tag label">Favourited!</div>');
 
-  // this needs to set up a post request eventually to store the favourite in the database.
-  // let id = $like.data("mongo-id");
-  // $.post(`/tweets/${id}/like`, "");
 }
 
   function getMaps(){
@@ -66,7 +60,24 @@ function toggleFavourite($favorite){
 
       $("div.card i.heart").on("click", function(event){
         event.stopPropagation();
+
+        // do database stuff via ajax.
+        if($(this).data("is-favorite")){
+          //if user clicked on favorite, delete favorite.
+          $.ajax({
+              method: "DELETE",
+              url: "/maps/" + $(this).data("map-id") + "/favorite"
+            });
+        } else {
+          // if user clicked on non-favorite, add as favorite.
+          $.ajax({
+              method: "POST",
+              url: "/maps/" + $(this).data("map-id") + "/favorite"
+            });
+        }
+
         toggleFavourite($(this));
+
       });
 
       $('div.card').on("click", function(){
