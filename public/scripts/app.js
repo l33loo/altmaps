@@ -130,10 +130,55 @@ initMap = function() {
           draggable: true,
           map: currentMap.map
         });
+        // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+
+
+
+        // var pinInfoUser = '<div id="infoWin">' +
+        //     '<form action="/maps/' + currentMap.map + '" method="POST"'> +
+        //       '<input type="text" value=' + pin.title + '>' +
+        //       '<input type="text" value=' + pin.description + '>' +
+        //       '<div>lat: ' + pin.latitude + ', long: ' + pin.longitude + '</div>' +
+        //       '<input type="submit" value="Edit">' +
+        //     // '<div>Created by <a href="/users/:userID">' + USER + '</a></div>' +
+        //       '<div>Created by <a href="/users/1">1</a></div>' +
+        //     '</form>' +
+        //     '<form action="/maps/' + currentMap.map + '" method="DELETE"'>'<input type="submit" value="Delete"></form>' +
+        //     '</div>';
+
+        var pinInfo = '<div id="infoWin">' +
+            '<b>' + pin.title + '</b>' +
+            '<div>' + pin.description + '</div>' +
+            '<div>lat: ' + pin.latitude + '</div>' +
+            '<div>long: ' + pin.longitude + '</div>' +
+            // '<div>Created by<a href="/users/:userID">' + USER + '</a></div>'
+            '<div>Created by <a href="/users/1">1</a></div>' +
+            '</div>';
+
+        // var newPinInfo = '<b>new</b>';
+
+        // var newPinInfo = '<div id="infoWin">' +
+        //     '<form action="/maps/' + currentMap.map + '" method="PUT"'> +
+        //       '<input type="text" value=' + pin.title + '>' +
+        //       '<input type="text" value=' + pin.description + '>' +
+        //       '<div>lat: ' + pin.latitude + ', long: ' + pin.longitude + '</div>' +
+        //       '<input type="submit" value="Edit">' +
+        //     // '<div>Created by <a href="/users/:userID">' + USER + '</a></div>' +
+        //       '<div>Created by <a href="/users/1">1</a></div>' +
+        //     '</form>' +
+        //     '<form action="/maps/' + currentMap.map + '" method="DELETE"'>'<input type="submit" value="Delete"></form>' +
+        //     '</div>';
 
         google.maps.event.addListener(newMarker, 'click', function() {
           currentMap.infoWindow.close();
-          currentMap.infoWindow.setContent(pin.description);
+          // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+          // if (pin is new) {
+            // currentMap.infoWindow.setContent(newPinInfo);
+          // } else if (user logged in and owns pin) {
+            // currentMap.infoWindow.setContent(pinInfoUser);
+          // } else {
+            currentMap.infoWindow.setContent(pinInfo);
+          // }
           currentMap.infoWindow.open(currentMap.map, newMarker);
         });
 
@@ -159,8 +204,6 @@ initMap = function() {
 
         // Or {latitude: req.body.lat},?
         latitude: pin.position.lat(),
-
-        // Or {longitude: req.body.lng},?
         longitude: pin.position.lng(),
 
         // Or {title: $(req.body.title).serialize()},?
