@@ -1,7 +1,9 @@
 $(document).ready(function(){
 
-  function createMapCard(title, created_by, updated_at, description){
-    var $card = $('<div class="card">');
+  function createMapCard(id, title, created_by, updated_at, description){
+    // var $link = $('<a class="card" href="/maps/' + id + '" ></a>"');
+    // console.dir($link);
+    var $card = $('<div class="card">').data({mapId: id});
     $('<div class="image"><img src="/images/map_placeholder.jpg"></div>').appendTo($card);
     var $content = $('<div class="content">').appendTo($card);
     var $title = $('<div class="header">').text(title).appendTo($content);
@@ -11,6 +13,8 @@ $(document).ready(function(){
     var $rightFooter = $('<span class="right floated">').text(updated_at).appendTo($extraContent);
     var $leftFooter = $('<span>').text("75 Contributors").appendTo($extraContent);
     var $icon = $('<i class="user icon"></i>').insertBefore($leftFooter);
+
+
 
 
     return $card;
@@ -43,7 +47,7 @@ $(document).ready(function(){
   function populateMapList(maps, $parent){
     console.dir(maps);
     maps.forEach(function(map){
-      createMapCard(map.title, map.created_by, map.updated_at.slice(0,10), map.description).appendTo($parent);
+      createMapCard(map.id, map.title, map.created_by, map.updated_at.slice(0,10), map.description).appendTo($parent);
     });
 
   }
@@ -52,6 +56,10 @@ $(document).ready(function(){
     $.getJSON("/maps/json").then(function(maps){
 
       populateMapList(maps, $('#maps-list'));
+
+      $('div.card').on("click", function(){
+        window.location.href = "/maps/" + $(this).data().mapId;
+      })
 
     })
     .catch(function(err){
