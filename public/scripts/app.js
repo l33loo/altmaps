@@ -71,13 +71,19 @@ initMap = function() {
     return bounds;
   }
 
-  function createPlaceListItem(title, description, placeId){
+  function createPlaceListItem(title, description, placeId, index){
 
     var $item = $('<div id="list-' + placeId + '" class="item">');
     var $icon = $('<i class="map marker icon">').appendTo($item);
     var $content = $('<div class="content">').appendTo($item);
     var $title = $('<a class="header">').text(title).appendTo($content);
     var $description = $('<div class="description">').text(description).appendTo($content);
+
+    $title.on('click', function(){
+
+      google.maps.event.trigger(currentMap.markers[index], 'click');
+
+    });
 
     return $item;
   }
@@ -86,8 +92,8 @@ initMap = function() {
 
     var $newList = $('<div id="pins-list" class="ui list">');
 
-    places.forEach(function(place){
-      createPlaceListItem(place.title, place.description, place.id).appendTo($newList);
+    places.forEach(function(place, index){
+      createPlaceListItem(place.title, place.description, place.id, index).appendTo($newList);
     });
 
     $elm.replaceWith($newList);
@@ -113,6 +119,7 @@ initMap = function() {
     var $add = $('<button class="ui button" type="submit">Add</button>').appendTo($form);
 
     $item.prependTo($list);
+    $title.focus();
 
     return $form;
 
@@ -132,7 +139,7 @@ initMap = function() {
           map: currentMap.map
         });
         // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-
+        newMarker.placeId = pin.id;
 
 
         // var pinInfoUser = '<div id="infoWin">' +
@@ -171,6 +178,11 @@ initMap = function() {
         //     '</div>';
 
         google.maps.event.addListener(newMarker, 'click', function() {
+          console.dir(newMarker);
+
+          // highlight corresponding entry in list
+          $("#pins-list").children().removeClass("highlight");
+          $("#list-" + newMarker.placeId).addClass("highlight");
           currentMap.infoWindow.close();
           // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
           // if (pin is new) {
@@ -225,6 +237,12 @@ initMap = function() {
   currentMap.markers = [];
 
   getPins();
+
+  currentMap.markers.forEach(function(marker){
+    if(marker.placeId === 9){
+      $(marker).click();
+    }
+  })
 
   google.maps.event.addListener(currentMap.map, 'click', function(event) {
     // console.log('map clicked');
