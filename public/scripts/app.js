@@ -248,7 +248,3 @@ initMap = function() {
     postPin(marker);
   });
 }
-
-$(document).ready(function(){
-
-});
