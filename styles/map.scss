@@ -3,3 +3,17 @@
  height: 400px;
  width: 100%;
 }
+
+div.ui.list form input {
+  font-size: 0.75em;
+  color: green;
+}
+
+.highlight {
+  background-color: lighten(#5F73A0, 35%);
+}
+
+i.edit.icon {
+  padding-left: 0.5em;
+  cursor: pointer;
+}

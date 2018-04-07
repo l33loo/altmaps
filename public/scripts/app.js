@@ -1,17 +1,3 @@
-// require('dotenv').config();
-// const knex        = require("knex")(knexConfig[ENV]);
-// We don't want this for now.
-
-// $(() => {
-//   $.ajax({
-//     method: "GET",
-//     url: "/api/users"
-//   }).done((users) => {
-//     for(user of users) {
-//       $("<div>").text(user.name).appendTo($("body"));
-//     }
-//   });;
-// });
 
 var currentMap = {};
 
@@ -60,13 +46,6 @@ currentMap.styles = [
   }
 ];
 
-// currentMap.pins = [{lat: 48.4064791, lng: -123.3735108, title: "I am a beach", description: "This is the first place I clicked", createdBy: "Andrew"},
-// {lat: 48.4335921, lng: -123.3123138, title: "Willows Beach", description: "Awesome swimming!!1", createdBy: "Andrew"},
-// {lat: 48.463765, lng: -123.280170, title: "Telegraph Cove", description: "So romantic! Awww", createdBy: "Andrew"},
-// {lat: 48.4555994, lng: -123.350961, title: "Water Feature", description: "Surprise, it's not actually a beach! Do not swim in the water features!", createdBy: "Andrew"},
-// {lat: 48.4465182, lng: -123.4077808, title: "That Beach on The Gorge", description: "Secluded Solitude, rewards await the adventurous swimmer", createdBy: "Andrew"}];
-
-
 // callback function called by maps API on map load.
 initMap = function() {
 
@@ -92,21 +71,64 @@ initMap = function() {
     return bounds;
   }
 
-  function createPlaceListItem(title, description){
-    var $item = $('<div class="item">');
+  function editButtonHandler(index){
+    return function(event){
+
+      event.preventDefault();
+
+      // this is the text fields, siblings to the submit button in DOM.
+      var $inputs = $(this).siblings();
+
+      // basic check to make sure values aren't empty.
+      if($inputs[0].value && $inputs[1].value){
+        putPin(currentMap.markers[index], $inputs[0].value, $inputs[1].value)
+      }
+
+    }
+  }
+
+  function createPlaceListItem(title, description, placeId, index){
+
+    var $item = $('<div id="list-' + placeId + '" class="item">');
     var $icon = $('<i class="map marker icon">').appendTo($item);
     var $content = $('<div class="content">').appendTo($item);
-    var $title = $('<a class="header">').text(title).appendTo($content);
+    var $header = $('<div class="header">').appendTo($content);
+    var $title = $('<a>').text(title).appendTo($header);
+    var $edit = $('<i class="edit icon">').appendTo($header);
     var $description = $('<div class="description">').text(description).appendTo($content);
+
+    $title.on('click', function(){
+
+      google.maps.event.trigger(currentMap.markers[index], 'click');
+
+    });
+
+    $edit.on('click', function(){
+      //edit place by replacing listing with form.
+
+      var $newContent = $('<div class="content">');
+      var $form = $('<form class="ui form">').appendTo($newContent);
+      var $formTitle = $('<input type="text" name="title" placeholder="Pin Title">').val($title.text()).appendTo($form);
+      var $formDescription = $('<input type="text" name="description" placeholder="Description">').val($description.text()).appendTo($form);
+      var $formEdit = $('<button class="ui button" type="submit">Edit</button>').appendTo($form);
+
+      $formEdit.on('click', editButtonHandler(index));
+
+      $content.replaceWith($newContent);
+    });
 
     return $item;
   }
 
-  function populatePlaceList(places, $parent){
+  function populatePlaceList(places, $elm){
 
-    places.forEach(function(place){
-      createPlaceListItem(place.title, place.description).appendTo($parent);
+    var $newList = $('<div id="pins-list" class="ui list">');
+
+    places.forEach(function(place, index){
+      createPlaceListItem(place.title, place.description, place.id, index).appendTo($newList);
     });
+
+    $elm.replaceWith($newList);
 
   }
 
@@ -115,6 +137,24 @@ initMap = function() {
     var regex = /maps\/(\d+)\/?\b/;
     var mapId = regex.exec(pathname);
     return mapId[1];
+  }
+
+  // adds a blank form to the top of the markers list and returns the jQuery object referencing the form.
+  function addMarkerFormToList($list){
+
+    var $item = $('<div class="item">');
+    var $icon = $('<i class="map marker icon">').appendTo($item);
+    var $content = $('<div class="content">').appendTo($item);
+    var $form = $('<form class="ui form">').appendTo($content);
+    var $title = $('<input type="text" name="title" placeholder="Pin Title">').appendTo($form);
+    var $description = $('<input type="text" name="description" placeholder="Description">').appendTo($form);
+    var $add = $('<button class="ui button" type="submit">Add</button>').appendTo($form);
+
+    $item.prependTo($list);
+    $title.focus();
+
+    return $form;
+
   }
 
   function getPins(){
@@ -131,7 +171,7 @@ initMap = function() {
           map: currentMap.map
         });
         // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
-
+        newMarker.placeId = pin.id;
 
 
         // var pinInfoUser = '<div id="infoWin">' +
@@ -170,6 +210,11 @@ initMap = function() {
         //     '</div>';
 
         google.maps.event.addListener(newMarker, 'click', function() {
+          console.dir(newMarker);
+
+          // highlight corresponding entry in list
+          $("#pins-list").children().removeClass("highlight");
+          $("#list-" + newMarker.placeId).addClass("highlight");
           currentMap.infoWindow.close();
           // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
           // if (pin is new) {
@@ -195,32 +240,40 @@ initMap = function() {
     });
   }
 
-  function postPin(pin) {
-    // $(pin).on('submit', function(event) {
-      // event.preventDefault();
-      var data = {
-        created_by: 1,
-        map_id: currentMap.mapId,
+  function postPin(pin, title, description) {
 
-        // Or {latitude: req.body.lat},?
+      var data = {
+
         latitude: pin.position.lat(),
         longitude: pin.position.lng(),
+        title: title,
+        description: description
 
-        // Or {title: $(req.body.title).serialize()},?
-        title: pin.title /*$(this.title).serialize()*/,
-
-        // Or {title: $(req.body.description).serialize()},?
-        description: 'boo' /*$(this.description).serialize()*/
-
-        // {category: req.body.category}?
-        // color:
       };
       // console.log('data: ', data);
       $.post("/maps/" + currentMap.mapId, data).done(function() {
 
         getPins();
-      // });
-    });
+      });
+  }
+
+  function putPin(pin, title, description) {
+    console.dir(pin);
+      var data = {
+
+        latitude: pin.position.lat(),
+        longitude: pin.position.lng(),
+        title: title,
+        description: description
+
+      };
+      console.log('data: ', data);
+      $.ajax({
+          method: "PUT",
+          url: "/maps/" + $(this).data("map-id") + "/" + pin.placeId
+        }).done( function() {
+          getPins()
+        });
   }
 
   currentMap.mapId = getMapId();
@@ -236,6 +289,12 @@ initMap = function() {
 
   getPins();
 
+  currentMap.markers.forEach(function(marker){
+    if(marker.placeId === 9){
+      $(marker).click();
+    }
+  })
+
   google.maps.event.addListener(currentMap.map, 'click', function(event) {
     // console.log('map clicked');
     // console.log(event.latLng);
@@ -246,7 +305,23 @@ initMap = function() {
       map: currentMap.map
     });
     marker.setMap(currentMap.map);
-    // console.log(event.latLng);
-    postPin(marker);
+
+    // add blank form and store as jQuery object.
+    var $form = addMarkerFormToList($('#pins-list'));
+
+    // set listener for submit button.
+    $form.children("button").on('click', function(event){
+
+      event.preventDefault();
+
+      // this is the text fields, siblings to the submit button in DOM.
+      var $inputs = $(this).siblings();
+
+      // basic check to make sure values aren't empty.
+      if($inputs[0].value && $inputs[1].value){
+        postPin(marker, $inputs[0].value, $inputs[1].value)
+      }
+
+    });
   });
 }

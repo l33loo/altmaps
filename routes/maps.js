@@ -48,7 +48,18 @@ module.exports = (knex) => {
   // MAP
   router.get("/:mapID", (req, res) => {
     // if (/* map exists and user authorized */) {
-      res.render("map", {loggedIn: req.loggedIn, userId: req.session.userId});
+      knex("maps")
+        .select("title", "description")
+        .where({id: req.params.mapID})
+        .limit(1)
+        .then(function(result){
+
+          let templateVars = {loggedIn: req.loggedIn, userId: req.session.userId, title: result[0].title, description: result[0].description};
+
+          res.render("map", templateVars);
+        })
+        .catch();
+
 
     // Do we instead want to redirect to  with a flash error message on the page or alert?
     // } else if (/* map doesn't exist */) {
@@ -115,20 +126,48 @@ module.exports = (knex) => {
 
   router.post("/:mapID" /*or just '' ? */, (req, res) => {
     //if (user logged in)...
-    knex("map_pins").insert({
+    if(req.loggedIn){
+      knex("map_pins").insert({
 
-      //created_by: req.session.user_id?
-      created_by: Number(req.body.created_by),
-      map_id: Number(req.body.map_id),
-      latitude: req.body.latitude,
-      longitude: req.body.longitude,
-      title: req.body.title,
-      description: req.body.description
-    })
-    .then(res.status(201).send())
-    .catch(function(err) {
-      console.error(err);
-    });
+        created_by: req.session.user_id,
+        map_id: req.params.mapID,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        title: req.body.title,
+        description: req.body.description
+      })
+      .then(res.status(201).send())
+      .catch(function(err) {
+        console.error(err);
+        res.status(500).send();
+      });
+    } else {
+      res.status(401).send();
+    }
+  });
+
+  router.put("/:mapID/:pinID" /*or just '' ? */, (req, res) => {
+    //if (user logged in)...
+    if(req.loggedIn){
+      console.log("Should be putting pin", req.params.pinID);
+
+      // there's something wrong with this query??
+      knex("map_pins")
+      .where("id",  req.params.pinID)
+      .update({
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        title: req.body.title,
+        description: req.body.description
+      })
+      .then(res.status(201).send())
+      .catch(function(err) {
+        console.error(err);
+        res.status(500).send();
+      });
+    } else {
+      res.status(401).send();
+    }
   });
 
   return router;

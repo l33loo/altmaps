@@ -9,10 +9,10 @@ exports.seed = function(knex, Promise) {
     })
     .then(function () {
       return Promise.all([
-        knex('maps').insert({created_by: 1, title: 'Map One', description: 'One is the Loneliest Number'}),
-        knex('maps').insert({created_by: 1, title: 'Cool Beaches', description: 'And other interesting oceanside features.'}),
-        knex('maps').insert({created_by: 2, title: 'Victoria Coffee Spots', description: 'Where are the best places for coffee?'}),
-        knex('maps').insert({created_by: 3, title: 'Indian Adventure', description: 'Adventure awaits!'}),
+        knex('maps').insert([{created_by: 1, title: 'Map One', description: 'One is the Loneliest Number'},
+        {created_by: 1, title: 'Cool Beaches', description: 'And other interesting oceanside features.'},
+        {created_by: 2, title: 'Victoria Coffee Spots', description: 'Where are the best places for coffee?'},
+        {created_by: 3, title: 'Indian Adventure', description: 'Adventure awaits!'}])
       ]);
     })
     .then(function () {
