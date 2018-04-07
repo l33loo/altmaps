@@ -131,11 +131,34 @@ initMap = function() {
           map: currentMap.map
         });
 
+        var pinInfoUser = '<div id="infoWin">' +
+            '<form action="/maps/' + currentMap.map + '" method="PUT"'> +
+              '<input type="text" value=' + pin.title + '>' +
+              '<input type="text" value=' + pin.description + '>' +
+              '<div>lat: ' + pin.latitude + ', long: ' + pin.longitude + '</div>' +
+              '<input type="submit" value="Edit">' +
+            // '<div>Created by <a href="/users/:userID">' + USER + '</a></div>' +
+              '<div>Created by <a href="/users/1">1</a></div>' +
+            '</form>' +
+            '<form action="/maps/' + currentMap.map + '" method="DELETE"'>'<input type="submit" value="Delete"></form>' +
+            '</div>';
+
+        var pinInfo = '<div id="infoWin">' +
+            '<b>' + pin.title + '</b>' +
+            '<div>' + pin.description + '</div>' +
+            '<div>lat: ' + pin.latitude + '</div>' +
+            '<div>long: ' + pin.longitude + '</div>' +
+            // '<div>Created by<a href="/users/:userID">' + USER + '</a></div>'
+            '<div>Created by <a href="/users/1">1</a></div>' +
+            '</div>';
+
         google.maps.event.addListener(newMarker, 'click', function() {
           currentMap.infoWindow.close();
-          var pinInfo = '<div id="infoWin">' +
-            '<h1>' + pin.title
-          currentMap.infoWindow.setContent(pinInfo);
+          // if (user logged in and owns pin) {
+            // currentMap.infoWindow.setContent(pinInfoUser);
+          // } else {
+            currentMap.infoWindow.setContent(pinInfo);
+          // }
           currentMap.infoWindow.open(currentMap.map, newMarker);
         });
 
