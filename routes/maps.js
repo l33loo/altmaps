@@ -15,6 +15,15 @@ module.exports = (knex) => {
     });
   });
 
+  router.get("/json", (req, res) => {
+    knex
+      .select("*")
+      .from("maps")
+      .then((results) => {
+        res.json(results);
+    });
+  });
+
   // MAPS
   router.get("", (req, res) => {
     console.log("req.loggedIn: ", req.loggedIn);
@@ -45,7 +54,7 @@ module.exports = (knex) => {
 
       created_by: req.session.userId,
       title: req.body.title,
-      category: req.body.description
+      description: req.body.description
     }).returning("id")
     .then(function(response){
       console.log(response)
