@@ -10,6 +10,7 @@
   <title>Register - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
+  <script type="text/javascript" src="/scripts/register.js"></script>
 
 </head>
 
@@ -27,6 +28,10 @@
 
       <div class="ui container segment">
         <form action="/login" method="POST"class="ui form">
+          <div class="field">
+            <label>Username</label>
+            <input type="text" name="email" placeholder="Username">
+          </div>
           <div class="field">
             <label>Email</label>
             <input type="text" name="email" placeholder="you@...">
