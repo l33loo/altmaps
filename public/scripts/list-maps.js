@@ -7,12 +7,13 @@ $(document).ready(function(){
     $('<div class="image"><img src="/images/map_placeholder.jpg"></div>').appendTo($card);
     var $content = $('<div class="content">').appendTo($card);
     var $title = $('<div class="header">').text(title).appendTo($content);
+    var $favourite = $('<span class="right floated"><i class="heart outline icon"></span>').appendTo($title);
     var $description = $('<div class="description">').text(description).appendTo($content);
 
     var $extraContent = $('<div class="extra content">').appendTo($card);
     var $rightFooter = $('<span class="right floated">').text(updated_at).appendTo($extraContent);
     var $leftFooter = $('<span>').text("75 Contributors").appendTo($extraContent);
-    var $icon = $('<i class="user icon"></i>').insertBefore($leftFooter);
+    var $icon = $('<i class="user icon"></i><i class="heart icon"></i><i class="heart outline icon"></i>').insertBefore($leftFooter);
 
 
 
