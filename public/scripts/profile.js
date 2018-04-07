@@ -1,25 +1,5 @@
 $(document).ready(function() {
 
-  // function createPlaceListItem(title, description){
-  //   var $item = $('<div class="item">');
-  //   var $icon = $('<i class="map marker icon">').appendTo($item);
-  //   var $content = $('<div class="content">').appendTo($item);
-  //   var $title = $('<a class="header">').text(title).appendTo($content);
-  //   var $description = $('<div class="description">').text(description).appendTo($content);
-
-  //   return $item;
-  // }
-
-  // function populatePlaceList(places, $parent){
-
-  //   places.forEach(function(place){
-  //     createPlaceListItem(place.title, place.description).appendTo($parent);
-  //   });
-
-  // }
-
-
-
   function getUserId() {
     var pathname = window.location.pathname;
     var regex = /users\/(\d+)\/?\b/;
