@@ -1,17 +1,11 @@
+$(document).ready(function() {
 
-  // function getUserId() {
-  //   var pathname = window.location.pathname;
-  //   var regex = /users\/(\d+)\/?\b/;
-  //   var userId = regex.exec(pathname);
-  //   return userId[1];
-  // }
-
-  //   function getMapId(){
-  //   var pathname = window.location.pathname;
-  //   var regex = /maps\/(\d+)\/?\b/;
-  //   var mapId = regex.exec(pathname);
-  //   return mapId[1];
-  // }
+  function getUserId() {
+    var pathname = window.location.pathname;
+    var regex = /users\/(\d+)\/?\b/;
+    var userId = regex.exec(pathname);
+    return userId[1];
+  }
 
   var profileUserId = getUserId();
 
@@ -57,11 +51,12 @@
       });
     }
 
-  // getFavs();
+  getFavs();
 
 
   // doesn;t work yet.
   // getContrib();
+});
 
 
 // <div class="ui container segment">
@@ -76,15 +71,11 @@
 //           </div>
 //           <div class="ui vertical divider">
 //           </div>
-//           <div class="column">
-//             <div class="fav">
-//               <h2>Favorite Maps</h2>
-//             </div>
+//           <div class="column" id="fav">
+//             <h2>Favorite Maps</h2>
 //           </div>
-//           <div class="column">
-//             <div class="contrib">
-//               <h2>Contributor on</h2>
-//             </div>
+//           <div class="column" id="contrib">
+//             <h2>Contributor on</h2>
 //           </div>
 //         </div>
 //       </div>
