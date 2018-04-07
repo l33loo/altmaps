@@ -50,21 +50,53 @@ module.exports = (knex) => {
 
 
   router.post("/new" /*or just '' ? */, (req, res) => {
-    knex("maps").insert({
+    if(req.loggedIn){
+      knex("maps").insert({
 
-      created_by: req.session.userId,
-      title: req.body.title,
-      description: req.body.description
-    }).returning("id")
-    .then(function(response){
-      console.log(response)
-      res.redirect("../")
-    })
-    .catch(function(err) {
-      console.error(err);
-      res.redirect("/");
-    });
+        created_by: req.session.userId,
+        title: req.body.title,
+        description: req.body.description
+      }).returning("id")
+      .then(function(response){
+        console.log(response)
+        res.redirect("../")
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.redirect("/");
+      });
+    }
+  });
 
+  router.post("/favorite", (req, res) => {
+    if(req.loggedIn){
+      knex("favorite_maps").insert({
+        user_id: req.session.userId,
+        map_id: req.body.map_id,
+      })
+      .then(function(){
+        res.status(200).send();
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.status(500).send("Error inserting favourite");
+      });
+    }
+  });
+
+  router.delete("/favorite", (req, res) => {
+    if (req.loggedIn) {
+      knex("favorite_maps")
+        .where({user_id: req.session.userId, map_id: req.body.map_id})
+        .del()
+        .then(function(){
+          res.status(200).send();
+        })
+        .catch(function(err) {
+          console.error(err);
+          res.status(500).send("Error deleting favourite");
+        });
+    }
   });
 
   // EDIT MAP via AJAX (PUT "/:mapID") (router.js);
