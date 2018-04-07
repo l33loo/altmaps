@@ -130,6 +130,7 @@ initMap = function() {
           draggable: true,
           map: currentMap.map
         });
+        // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
 
 
@@ -170,6 +171,7 @@ initMap = function() {
 
         google.maps.event.addListener(newMarker, 'click', function() {
           currentMap.infoWindow.close();
+          // newMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
           // if (pin is new) {
             // currentMap.infoWindow.setContent(newPinInfo);
           // } else if (user logged in and owns pin) {
