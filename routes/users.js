@@ -1,17 +1,28 @@
 "use strict";
 
 const express = require('express');
-
 const router  = express.Router();
 
 module.exports = (knex) => {
 
-  router.get("/:id/json", (req, res) => {
+  router.get("/:id/fav/json", (req, res) => {
     knex
-      .select("*")
-      .from("maps")
-      .fullOuterJoin("favorite_maps", "maps.created_by", "favorite_maps.user_id")
+      .select("title")
+      .from("favorite_maps")
+      .leftOuterJoin("maps", "favorite_maps.map_id", "maps.id")
       .where({user_id: req.params.id})
+      .then((results) => {
+        res.json(results);
+      });
+  });
+
+  // Doesn't work because created_by exists in bpth maps and map_pins table (so does title)
+  router.get("/:id/contrib/json", (req, res) => {
+    knex
+      .select("title")
+      .from("map_pins")
+      .leftOuterJoin("maps", "map_pins.map_id", "maps.id")
+      .where({created_by: req.params.id})
       .then((results) => {
         res.json(results);
       });
