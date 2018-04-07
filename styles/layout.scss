@@ -79,6 +79,10 @@ i.heart:hover {
   color: red;
 }
 
+i.heart.red {
+  color: red;
+}
+
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {
     display: none !important;
