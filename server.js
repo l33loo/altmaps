@@ -102,7 +102,96 @@ app.get("/register", (req, res) => {
   }
 });
 
+function checkEmptyFields() {
+  if (!$("input.username").val() ||
+      !$("input.email").val() ||
+      !$("input.first-name").val() ||
+      !$("input.last-name").val() ||
+      !$("input.password").val()) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+  function checkUsernameReg(username) {
+    console.log("checkUsernameReg");
+    knex('users')
+      .select()
+      .where('username', username)
+      .then(user => {
+        console.log('user: ' + user);
+        return Boolean(user.username);
+      })
+      .catch(err => {
+        console.error(err);
+    });
+  }
+
+  function checkEmailReg(email) {
+    console.log("checkEmailReg");
+    knex('users')
+      .select()
+      .where('email', email)
+        .then(user => {
+          return Boolean(user.email);
+      })
+      .catch(err => {
+        console.error(err);
+    });
+  }
+
+function errorMsg(msg) {
+  console.log(errorMsg);
+  $('form').delete("div.error");
+            // event.preventDefault();
+            // $('button').attr('disabled', 'disabled');
+            var errorMsg = $("<div class='error'>").text(msg);
+            $('form').append(errorMsg);
+}
+
+function successReg(info) {
+  console.log("successReg");
+  $('form').delete("div.error");
+      bcrypt.hash(info.password, 12).then(function(hash) {
+        knex('users').insert({
+          username: info.username,
+          email: info.email,
+          first_name: info.firstName,
+          last_name: info.lastName,
+          password_hash: hash
+        })
+        .then( // fetch userID
+          req.session.userId = info.email)
+        .then(res.redirect("/maps/json"));
+      });
+}
+
+  function validateForSubmit(username, email) {
+    console.log("validateForSubmit");
+    if (checkEmptyFields()) {
+      errorMsg("Please fill out all the fields.");
+    } else if (checkUsernameReg(username)) {
+      errorMsg("This username is already registered.");
+
+    } else if (checkEmailReg(email)) {
+      errorMsg("This email is already registered. Please log in instead.");
+    } else {
+      successReg(req.body);
+    }
+  }
+
+// function getUserNrFromEmail(givenEmail) {
+//   const usersArr = Object.getOwnPropertyNames(usersDb);
+//   return usersArr.find(function(user) {
+//     if (givenEmail === usersDb[user].email) {
+//       return user;
+//     }
+//   });
+// }
+
 app.post("/register", (req, res) => {
+  validateForSubmit(req.body.username, req.body.email);
   // Display error messages directly on page with jQUERY (app.js):
   // 1. email/username already registered
   // 2. Invalid email/username
