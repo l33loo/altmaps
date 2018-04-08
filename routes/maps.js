@@ -68,24 +68,35 @@ function getPage(req, res, views) {
 
   // MAP
   router.get("/:mapID", (req, res) => {
-      knex.select("title", "description", "username")
-        .from("maps")
-        .fullOuterJoin("users", "maps.created_by", "users.id")
-        .where("maps.id", req.params.mapID)
+      let templateVars = new Object;
+      knex("maps")
+        .select("title", "description")
+        .where("id", req.params.mapID)
         .limit(1)
-        .then(function(result){
+        .then(function(result) {
 
-          let templateVars = {
-            loggedIn: req.loggedIn,
-            userId: req.session.userId,
-            username: result[0].username,
-            title: result[0].title,
-            description: result[0].description
-          };
-
-          res.render("map", templateVars);
+          templateVars["loggedIn"] = req.loggedIn;
+          templateVars["userId"] = req.session.userId;
+          templateVars["title"] = result[0].title;
+          templateVars["description"] = result[0].description;
         })
-        .catch();
+        .then(() => {
+          knex("users")
+            .select()
+            .where("id", req.session.userId)
+            .limit(1)
+            .then(function(rows) {
+
+              templateVars["username"] = rows[0].username;
+            })
+            .then(() => {
+              res.render("map", templateVars);
+            })
+            .catch();
+        })
+        .catch(err => {
+          res.status(404).send("This maps does not exists.");
+        });
 
 
     // Do we instead want to redirect to  with a flash error message on the page or alert?
