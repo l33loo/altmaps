@@ -38,26 +38,29 @@ module.exports = (knex) => {
       });
   });
 
-function getPage(req, res, url) {
+function getPage(req, res, views, uID) {
   if (req.loggedIn) {
     knex("users")
       .select()
       .where("id", req.session.userId)
       .limit(1)
       .then(rows => {
-        console.log("BOOYAH: " + rows[0].username);
-        res.render(url, {loggedIn: req.loggedIn, userId: rows[0].username});
+        res.render(views, {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
       })
       .catch(err => {
         console.error(err);
       });
   } else {
-    res.render(url, {loggedIn: req.loggedIn, userId: null});
+    res.status(401).send(`Please log in to view user profiles.`);
   }
 }
+
+  router.get("/profile", (req, res) => {
+    getPage(req, res, "user", req.session.userId);
+  })
   // VIEW USER PROFILE
-  router.get("/:userID", (req, res) => {
-    getPage(req, res, "user");
+  router.get("/:userId", (req, res) => {
+    getPage(req, res, "user", req.params.userId);
   });
 
   // EDIT USER PROFILE via AJAX (app.js) (PUT "/users/:userID");
