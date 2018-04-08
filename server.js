@@ -153,10 +153,6 @@ function checkEmailReg(req, res, cb) {
   });
 }
 
-function blah(result) {
-
-}
-
 function insertUserInfoDb(req, cb) {
 bcrypt.hash(req.body.password, 12)
   .then(hash => {
@@ -166,7 +162,8 @@ bcrypt.hash(req.body.password, 12)
         first_name: req.body.firstName,
         last_name: req.body.lastName,
         password_hash: hash
-    });
+    })
+    .then(cb);
   })
   .catch(err => {
             console.error(err);
@@ -193,30 +190,15 @@ app.post("/register", (req, res) => {
     res.status(400).send("Please fill out all the fields.");
   } else {
     checkUsernameReg(req, res, function() {
-      checkEmailReg(req, res, function(){
-        console.log("BOOH!!!");
+      checkEmailReg(req, res, function() {
+        insertUserInfoDb(req, function() {
+          console.log("WHHHAAAA!!");
+        });
       });
     });
   }
-//     console.log(checkEmptyFields(req.body));
-//     // res.status(400).send("Please fill out all the fields.");
-//   } else if (checkUsernameReg(req) === true) {
-//     // res.status(400).send("This username is already registered.");
-//   } else
-// {
-// checkEmailReg(req.body.email, () => {
 
-
-// }
-
-// }
-
-
-//   if (c === true) {
-//     // res.status(400).send("This email is already registered. Please log in instead.");
-//   } else {
-
-//       insertUserInfoDb(req, res);
+//
 //       getUserIdFromEmail(req, res);
 //   }
 });
