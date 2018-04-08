@@ -33,7 +33,8 @@ module.exports = (knex) => {
     }
 
   });
-function getPage(req, res, url) {
+
+function getPage(req, res, views) {
   if (req.loggedIn) {
     knex("users")
       .select()
@@ -41,13 +42,13 @@ function getPage(req, res, url) {
       .limit(1)
       .then(rows => {
         console.log("BOOYAH: " + rows[0].username);
-        res.render(url, {loggedIn: req.loggedIn, userId: rows[0].username});
+        res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId, username: rows[0].username});
       })
       .catch(err => {
         console.error(err);
       });
   } else {
-    res.render(url, {loggedIn: req.loggedIn, userId: null});
+    res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId});
   }
 }
   // MAPS
