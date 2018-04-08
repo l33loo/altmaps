@@ -103,51 +103,72 @@ app.get("/register", (req, res) => {
   }
 });
 
+
 //works
-function checkEmptyFields(req) {
-  console.log(req.username);
-  if (req.username === "" ||
-      req.email === "" ||
-      req.firstName === "" ||
-      req.lastName === "" ||
-      req.password === "") {
+function checkEmptyFields(req, res) {
+  console.log(req.body.username);
+  if (req.body.username === "" ||
+      req.body.email === "" ||
+      req.body.firstName === "" ||
+      req.body.lastName === "" ||
+      req.body.password === "") {
     return true;
   } else {
     return false;
   }
 }
 
-  function checkUsernameReg(uName) {
+function checkUsernameReg(req, res, callback) {
     // console.log("checkUsernameReg");
-    knex
-      .select()
-      .from('users')
-      .where('username', uName)
-      .then(user => {
-        console.log("boolean user[0] : " + Boolean(user[0]));
-        // console.log(user[0]);
-        return Boolean(user[0]);
-      })
-      .catch(err => {
-        console.error(err);
+  knex
+    .select()
+    .from('users')
+    .where('username', req.body.username)
+    .then(user => {
+      // console.log(user[0]);
+      callback(res, req, checkEmailReg);
+    })
+    .catch(err => {
+      console.error(err);
     });
-      return false;
-  }
+  res.status(400).send("This username is already registered.");
+}
 
-  function checkEmailReg(email) {
+function checkEmailReg(req, res, cb) {
     // console.log("checkEmailReg");
-    knex
-      .select()
-      .from('users')
-      .where('email', email)
-      .then(user => {
-        return Boolean(user[0]);
-      })
-      .catch(err => {
-        console.error(err);
+  knex
+    .select()
+    .from('users')
+    .where('email', email)
+    .then(user => {
+      callback(res, req, insertUserIntoDb);
+    })
+    .catch(err => {
+      console.error(err);
+  });
+res.status(400).send("This email is already registered. Please log in instead.");
+}
+
+function blah(result) {
+
+}
+
+function insertUserInfoDb(req, cb) {
+bcrypt.hash(req.body.password, 12)
+  .then(hash => {
+    knex("users").insert({
+        username: req.body.username,
+        email: req.body.email,
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        password_hash: hash
     });
-    return false;
-  }
+  })
+  .catch(err => {
+            console.error(err);
+          });
+
+}
 
 function getUserIdFromEmail(req, res) {
   knex
@@ -163,36 +184,34 @@ function getUserIdFromEmail(req, res) {
           });
 }
 
-function insertUserInfoDb(req, res) {
-knex("users").insert({
-        username: req.body.username,
-        email: req.body.email,
-        first_name: req.body.firstName,
-        last_name: req.body.lastName,
-        password_hash: hash
-      })
-}
-
 app.post("/register", (req, res) => {
-  if (checkEmptyFields(req.body) === true) {
-    console.log(checkEmptyFields(req.body));
+  if (checkEmptyFields(req)) {
+    console.log("error-emptyfields");
     res.status(400).send("Please fill out all the fields.");
-  } else if (checkUsernameReg(req.body.username) === true) {
-    res.status(400).send("This username is already registered.");
-  } else if (checkEmailReg(req.body.email) === true) {
-    res.status(400).send("This email is already registered. Please log in instead.");
   } else {
-    bcrypt.hash(req.body.password, 12)
-    .then(hash => {
-      insertUserInfoDb(req, res)
-      .then(() => {
-        getUserIdFromEmail(req, res);
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    });
+    console.log("not empty fields!");
   }
+//     console.log(checkEmptyFields(req.body));
+//     // res.status(400).send("Please fill out all the fields.");
+//   } else if (checkUsernameReg(req) === true) {
+//     // res.status(400).send("This username is already registered.");
+//   } else
+// {
+// checkEmailReg(req.body.email, () => {
+
+
+// }
+
+// }
+
+
+//   if (c === true) {
+//     // res.status(400).send("This email is already registered. Please log in instead.");
+//   } else {
+
+//       insertUserInfoDb(req, res);
+//       getUserIdFromEmail(req, res);
+//   }
 });
 
 // logs in user by user_id, which is entered into the email field on client side.
