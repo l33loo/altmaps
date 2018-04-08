@@ -105,7 +105,7 @@ app.get("/register", (req, res) => {
 
 //works
 function checkEmptyFields(info) {
-  console.log(typeof info.username);
+  console.log(info.username);
   if (info.username === "" ||
       info.email === "" ||
       info.firstName === "" ||
@@ -118,14 +118,14 @@ function checkEmptyFields(info) {
 }
 
   function checkUsernameReg(uName) {
-    console.log("checkUsernameReg");
+    // console.log("checkUsernameReg");
     knex
       .select()
       .from('users')
       .where('username', uName)
       .then(user => {
         console.log("boolean user[0] : " + Boolean(user[0]));
-        console.log(user[0]);
+        // console.log(user[0]);
         return Boolean(user[0]);
       })
       .catch(err => {
@@ -135,7 +135,7 @@ function checkEmptyFields(info) {
   }
 
   function checkEmailReg(email) {
-    console.log("checkEmailReg");
+    // console.log("checkEmailReg");
     knex
       .select()
       .from('users')
@@ -149,68 +149,74 @@ function checkEmptyFields(info) {
     return false;
   }
 
-
-
-
-
-
-
+function getUserIdFromEmail(req, res) {
+  knex
+          .select()
+          .from('users')
+          .where('email', req.body.email)
+          .then(rows => {
+            req.session.userId = rows[0].id;
+            res.redirect("/");
+          })
+          .catch(err => {
+            console.error(err);
+          });
+}
 
 app.post("/register", (req, res) => {
-  if (checkEmptyFields(req.body)) {
-    console.log(checkEmptyFields(req.body) === true);
-      res.status(400).send("Please fill out all the fields.");
-    } else if (checkUsernameReg(req.body.username) === true) {
-      res.status(400).send("This username is already registered.");
-    } else if (checkEmailReg(req.body.email) === true) {
-      res.status(400).send("This email is already registered. Please log in instead.");
-    } else {
-      bcrypt.hash(req.body.password, 12)
-      .then(function(hash) {
-        knex("users").insert({
-          username: req.body.username,
-          email: req.body.email,
-          first_name: req.body.firstName,
-          last_name: req.body.lastName,
-          password_hash: hash
-        })
-      .then(res.status(201).send())
+  if (checkEmptyFields(req.body) === true) {
+    console.log(checkEmptyFields(req.body));
+    res.status(400).send("Please fill out all the fields.");
+  } else if (checkUsernameReg(req.body.username) === true) {
+    res.status(400).send("This username is already registered.");
+  } else if (checkEmailReg(req.body.email) === true) {
+    res.status(400).send("This email is already registered. Please log in instead.");
+  } else {
+    bcrypt.hash(req.body.password, 12)
+    .then(hash => {
+      knex("users").insert({
+        username: req.body.username,
+        email: req.body.email,
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        password_hash: hash
+      })
+      .then(() => {
+        getUserIdFromEmail(req, res);
+        // knex
+        //   .select()
+        //   .from('users')
+        //   .where('email', req.body.email)
+        //   .then(rows => {
+        //     req.session.userId = rows[0].id;
+        //     res.redirect("/");
+        //   })
+        //   .catch(err => {
+        //     console.error(err);
+        //   });
+      })
       .catch(err => {
-          console.error(err);
-        });
+        console.error(err);
       });
-      const userIdFromEmail = knex
-        .select()
-        .from('users')
-        .where('email', req.body.email)
-        .then(user => {
-          console.log("user 0: " + user[0]);
-          return user[0].id.toString();
-      });
-  console.log("get user from email: " + userIdFromEmail);
-      // req.session.userId = userIdFromEmail;
-      res.redirect("/maps");
-    }
-  // Display error messages directly on page with jQUERY (app.js):
-  // 1. email/username already registered
-  // 2. Invalid email/username
-  // 3. Invalid password
+    });
+  }
 });
 
 // logs in user by user_id, which is entered into the email field on client side.
 app.post("/login", (req, res) => {
   if(req.body.email) {
-    knex
-      .select()
-      .from('users')
-      .where('email', req.body.email)
-      .asCallback(function(err, rows) {
-        if (err) {
-          return console.error(err);
-        }
-        req.session.userId = rows[0].id;
-        res.redirect("/");
-    });
+    getUserIdFromEmail(req, res);
+    // knex
+    //   .select()
+    //   .from('users')
+    //   .where('email', req.body.email)
+    //   .then(rows => {
+    //     req.session.userId = rows[0].id;
+    //     res.redirect("/");
+    //   })
+    //   .catch(err => {
+    //     console.error(err);
+    //   });
   } else {
     res.redirect("/");
   }
