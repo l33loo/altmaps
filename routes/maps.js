@@ -68,14 +68,20 @@ function getPage(req, res, views) {
 
   // MAP
   router.get("/:mapID", (req, res) => {
-    // if (/* map exists and user authorized */) {
-      knex("maps")
-        .select("title", "description")
-        .where({id: req.params.mapID})
+      knex.select("title", "description", "username")
+        .from("maps")
+        .fullOuterJoin("users", "maps.created_by", "users.id")
+        .where("maps.id", req.params.mapID)
         .limit(1)
         .then(function(result){
 
-          let templateVars = {loggedIn: req.loggedIn, userId: req.session.userId, title: result[0].title, description: result[0].description};
+          let templateVars = {
+            loggedIn: req.loggedIn,
+            userId: req.session.userId,
+            username: result[0].username,
+            title: result[0].title,
+            description: result[0].description
+          };
 
           res.render("map", templateVars);
         })
