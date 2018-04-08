@@ -103,6 +103,7 @@ app.get("/register", (req, res) => {
   }
 });
 
+//works
 function checkEmptyFields(info) {
   console.log(typeof info.username);
   if (info.username === "" ||
@@ -116,20 +117,21 @@ function checkEmptyFields(info) {
   }
 }
 
-  function checkUsernameReg(username) {
+  function checkUsernameReg(uName) {
     console.log("checkUsernameReg");
     knex
       .select()
       .from('users')
-      .where('username', username)
+      .where('username', uName)
       .then(user => {
-        console.log('user: ' + user);
+        console.log("boolean user[0] : " + Boolean(user[0]));
         console.log(user[0]);
         return Boolean(user[0]);
       })
       .catch(err => {
         console.error(err);
     });
+      return false;
   }
 
   function checkEmailReg(email) {
@@ -144,50 +146,49 @@ function checkEmptyFields(info) {
       .catch(err => {
         console.error(err);
     });
+    return false;
   }
 
-function successReg(info) {
-  console.log("successReg");
-      bcrypt.hash(info.password, 12)
-      .then(hash => {
-        knex('users')
-        .insert({
-          username: info.username,
-          email: info.email,
-          first_name: info.firstName,
-          last_name: info.lastName,
-          password_hash: hash
-        });
-      })
-      .catch(err => {
-          console.error(err);
-        });
-}
 
 
 
 
 
-// function getUserNrFromEmail(givenEmail) {
-//   const usersArr = Object.getOwnPropertyNames(usersDb);
-//   return usersArr.find(function(user) {
-//     if (givenEmail === usersDb[user].email) {
-//       return user;
-//     }
-//   });
-// }
+
 
 app.post("/register", (req, res) => {
   if (checkEmptyFields(req.body)) {
-    console.log(checkEmptyFields(req.body));
+    console.log(checkEmptyFields(req.body) === true);
       res.status(400).send("Please fill out all the fields.");
-    } else if (checkUsernameReg(req.body.username)) {
+    } else if (checkUsernameReg(req.body.username) === true) {
       res.status(400).send("This username is already registered.");
-    } else if (checkEmailReg(req.body.email)) {
+    } else if (checkEmailReg(req.body.email) === true) {
       res.status(400).send("This email is already registered. Please log in instead.");
     } else {
-      successReg(req.body);
-      req.session.userId = req.body.email;
+      bcrypt.hash(req.body.password, 12)
+      .then(function(hash) {
+        knex("users").insert({
+          username: req.body.username,
+          email: req.body.email,
+          first_name: req.body.firstName,
+          last_name: req.body.lastName,
+          password_hash: hash
+        })
+      .then(res.status(201).send())
+      .catch(err => {
+          console.error(err);
+        });
+      });
+      const userIdFromEmail = knex
+        .select()
+        .from('users')
+        .where('email', req.body.email)
+        .then(user => {
+          console.log("user 0: " + user[0]);
+          return user[0].id.toString();
+      });
+  console.log("get user from email: " + userIdFromEmail);
+      // req.session.userId = userIdFromEmail;
       res.redirect("/maps");
     }
   // Display error messages directly on page with jQUERY (app.js):
@@ -199,7 +200,14 @@ app.post("/register", (req, res) => {
 // logs in user by user_id, which is entered into the email field on client side.
 app.post("/login", (req, res) => {
   if(req.body.email){
-    req.session.userId = req.body.email;
+    const userIdFromEmail = knex
+      .select()
+      .from('users')
+      .where('email', req.body.email)
+      .then(user => {
+        return user[0].id;
+      });
+    // req.session.userId = userIdFromEmail;
     console.log(`Logged in user ${req.body.email}`);
   }
   res.redirect("/");
