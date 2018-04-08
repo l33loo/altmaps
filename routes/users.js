@@ -48,7 +48,7 @@ function getPage(req, res, uID) {
         res.render("user", {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
       })
       .catch(err => {
-        console.error(err);
+        res.status(404).send(`Please log in to view user profiles.`);
       });
   } else {
     res.status(401).send(`Please log in to view user profiles.`);
@@ -56,8 +56,8 @@ function getPage(req, res, uID) {
 }
 
   router.get("/profile", (req, res) => {
-    getPage(req, res, req.session.userId);
-  })
+    res.redirect(`/users/${req.session.userId}`);
+  });
   // VIEW USER PROFILE
   router.get("/:userId", (req, res) => {
     getPage(req, res, req.params.userId);
