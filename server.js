@@ -104,13 +104,13 @@ app.get("/register", (req, res) => {
 });
 
 //works
-function checkEmptyFields(info) {
-  console.log(info.username);
-  if (info.username === "" ||
-      info.email === "" ||
-      info.firstName === "" ||
-      info.lastName === "" ||
-      info.password === "") {
+function checkEmptyFields(req) {
+  console.log(req.username);
+  if (req.username === "" ||
+      req.email === "" ||
+      req.firstName === "" ||
+      req.lastName === "" ||
+      req.password === "") {
     return true;
   } else {
     return false;
@@ -163,6 +163,16 @@ function getUserIdFromEmail(req, res) {
           });
 }
 
+function insertUserInfoDb(req, res) {
+knex("users").insert({
+        username: req.body.username,
+        email: req.body.email,
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        password_hash: hash
+      })
+}
+
 app.post("/register", (req, res) => {
   if (checkEmptyFields(req.body) === true) {
     console.log(checkEmptyFields(req.body));
@@ -174,26 +184,9 @@ app.post("/register", (req, res) => {
   } else {
     bcrypt.hash(req.body.password, 12)
     .then(hash => {
-      knex("users").insert({
-        username: req.body.username,
-        email: req.body.email,
-        first_name: req.body.firstName,
-        last_name: req.body.lastName,
-        password_hash: hash
-      })
+      insertUserInfoDb(req, res)
       .then(() => {
         getUserIdFromEmail(req, res);
-        // knex
-        //   .select()
-        //   .from('users')
-        //   .where('email', req.body.email)
-        //   .then(rows => {
-        //     req.session.userId = rows[0].id;
-        //     res.redirect("/");
-        //   })
-        //   .catch(err => {
-        //     console.error(err);
-        //   });
       })
       .catch(err => {
         console.error(err);
