@@ -125,7 +125,6 @@ function checkUsernameReg(req, res, callback) {
     .from('users')
     .where('username', req.body.username)
     .then(user => {
-      console.log("USER!!!: ", user);
       if (user.length === 0) {
         callback();
       } else {
@@ -138,15 +137,13 @@ function checkUsernameReg(req, res, callback) {
 }
 
 function checkEmailReg(req, res, cb) {
-    console.log("checkEmailReg");
   knex
     .select()
     .from('users')
-    .where('email', email)
+    .where('email', req.body.email)
     .then(user => {
-        console.log("USER!!!: ", user);
-      if (user[0].id) {
-        callback(res, req, insertUserIntoDb);
+      if (user.length === 0) {
+        cb();
       } else {
         res.status(400).send("This email is already registered. Please log in instead.");
       }
@@ -196,7 +193,9 @@ app.post("/register", (req, res) => {
     res.status(400).send("Please fill out all the fields.");
   } else {
     checkUsernameReg(req, res, function() {
-      console.log("BOOH");
+      checkEmailReg(req, res, function(){
+        console.log("BOOH!!!");
+      });
     });
   }
 //     console.log(checkEmptyFields(req.body));
