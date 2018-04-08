@@ -10,13 +10,6 @@
 
     <% include partials/_styles-and-scripts %>
     <script type="text/javascript" src="/scripts/profile.js"></script>
-  </head>
-
-  <body>
-    <% var active = {home: "", maps: "active", profile: ""};
-        var hidden = "hidden"; %>
-    <nav> <% include partials/_header %> </nav>
-
 </head>
 
   <body>
@@ -34,7 +27,7 @@
       <% if(loggedIn) { %>
       <div class="ui container segment">
         <div class="ui segment">
-          <h1>-<%= userId %>'s profile-</h1>
+          <h1>-<%= username %>-</h1>
         </div>
       <div class="ui segment">
         <div class="ui three column very relaxed grid">
