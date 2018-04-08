@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  $('#logemail').focus();
 
   $('#login-button').on('click', function(){
     $hiddenButtons = $(this).siblings('.button').hide();
@@ -12,8 +13,6 @@ $(document).ready(function(){
         $.post("/login", data).done(function(response){
           console.log(response);
         });
-
     });
   });
-
 });

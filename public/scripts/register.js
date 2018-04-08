@@ -24,3 +24,7 @@
 //         .then(res.redirect("/maps/json"));
 //       });
 // }
+
+$(document).ready(function() {
+  $('#username').focus();
+});
