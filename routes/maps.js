@@ -34,16 +34,21 @@ module.exports = (knex) => {
 
   });
 function getPage(req, res, url) {
-  knex
-    .select()
-    .from('users')
-    .where('id', req.session.userId)
-    .then(rows => {
-      res.render(url, {loggedIn: req.loggedIn, userId: rows[0].username});
-    })
-    .catch(err => {
-      console.error(err);
-    });
+  if (req.loggedIn) {
+    knex("users")
+      .select()
+      .where("id", req.session.userId)
+      .limit(1)
+      .then(rows => {
+        console.log("BOOYAH: " + rows[0].username);
+        res.render(url, {loggedIn: req.loggedIn, userId: rows[0].username});
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  } else {
+    res.render(url, {loggedIn: req.loggedIn, userId: null});
+  }
 }
   // MAPS
   router.get("", (req, res) => {

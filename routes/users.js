@@ -38,17 +38,26 @@ module.exports = (knex) => {
       });
   });
 
+function getPage(req, res, url) {
+  if (req.loggedIn) {
+    knex("users")
+      .select()
+      .where("id", req.session.userId)
+      .limit(1)
+      .then(rows => {
+        console.log("BOOYAH: " + rows[0].username);
+        res.render(url, {loggedIn: req.loggedIn, userId: rows[0].username});
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  } else {
+    res.render(url, {loggedIn: req.loggedIn, userId: null});
+  }
+}
   // VIEW USER PROFILE
   router.get("/:userID", (req, res) => {
-    // if (exists) {
-      // if (loggedIn) { //
-        res.render("user", {loggedIn: req.loggedIn, userId: req.session.userId, profileId: req.params.userID});
-      // } else {
-        // res.status(40).send -- unauthorized, need to log in
-      // }
-    // } else {}
-    //   res.status(404).send("<html><body>This user does not exist. Please try again.</body></html>\n");
-    // }
+    getPage(req, res, "user");
   });
 
   // EDIT USER PROFILE via AJAX (app.js) (PUT "/users/:userID");
