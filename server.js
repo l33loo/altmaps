@@ -118,35 +118,42 @@ function checkEmptyFields(req, res) {
   }
 }
 
+// Calls callback if username does not already exist in db.
 function checkUsernameReg(req, res, callback) {
-    // console.log("checkUsernameReg");
   knex
     .select()
     .from('users')
     .where('username', req.body.username)
     .then(user => {
-      // console.log(user[0]);
-      callback(res, req, checkEmailReg);
+      console.log("USER!!!: ", user);
+      if (user.length === 0) {
+        callback();
+      } else {
+        res.status(400).send("This username is already registered.");
+      }
     })
     .catch(err => {
       console.error(err);
     });
-  res.status(400).send("This username is already registered.");
 }
 
 function checkEmailReg(req, res, cb) {
-    // console.log("checkEmailReg");
+    console.log("checkEmailReg");
   knex
     .select()
     .from('users')
     .where('email', email)
     .then(user => {
-      callback(res, req, insertUserIntoDb);
+        console.log("USER!!!: ", user);
+      if (user[0].id) {
+        callback(res, req, insertUserIntoDb);
+      } else {
+        res.status(400).send("This email is already registered. Please log in instead.");
+      }
     })
     .catch(err => {
       console.error(err);
   });
-res.status(400).send("This email is already registered. Please log in instead.");
 }
 
 function blah(result) {
@@ -186,10 +193,11 @@ function getUserIdFromEmail(req, res) {
 
 app.post("/register", (req, res) => {
   if (checkEmptyFields(req)) {
-    console.log("error-emptyfields");
     res.status(400).send("Please fill out all the fields.");
   } else {
-    console.log("not empty fields!");
+    checkUsernameReg(req, res, function() {
+      console.log("BOOH");
+    });
   }
 //     console.log(checkEmptyFields(req.body));
 //     // res.status(400).send("Please fill out all the fields.");
