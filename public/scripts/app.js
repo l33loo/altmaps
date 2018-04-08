@@ -192,7 +192,7 @@ initMap = function() {
             '<div>lat: ' + pin.latitude + '</div>' +
             '<div>long: ' + pin.longitude + '</div>' +
             // '<div>Created by<a href="/users/:userID">' + USER + '</a></div>'
-            '<div>Created by <a href="/users/1">1</a></div>' +
+            '<div>Created by <a href="/users/' + pin.created_by + '">' + pin.username + '</a></div>' +
             '</div>';
 
         // var newPinInfo = '<b>new</b>';
