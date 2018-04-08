@@ -14,6 +14,7 @@ const knexConfig  = require("./knexfile");
 const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
+const bcrypt      = require('bcrypt');
 
 // Seperated Routes for each Resource
 const mapsRoutes = require("./routes/maps");
@@ -102,20 +103,108 @@ app.get("/register", (req, res) => {
   }
 });
 
+
+//works
+function checkEmptyFields(req, res) {
+  console.log(req.body.username);
+  if (req.body.username === "" ||
+      req.body.email === "" ||
+      req.body.firstName === "" ||
+      req.body.lastName === "" ||
+      req.body.password === "") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Calls callback if username does not already exist in db.
+function checkUsernameReg(req, res, callback) {
+  knex
+    .select()
+    .from('users')
+    .where('username', req.body.username)
+    .then(user => {
+      if (user.length === 0) {
+        callback();
+      } else {
+        res.status(400).send("This username is already registered.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
+function checkEmailReg(req, res, cb) {
+  knex
+    .select()
+    .from('users')
+    .where('email', req.body.email)
+    .then(user => {
+      if (user.length === 0) {
+        cb();
+      } else {
+        res.status(400).send("This email is already registered. Please log in instead.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+  });
+}
+
+function insertUserInfoDb(req, cb) {
+bcrypt.hash(req.body.password, 12)
+  .then(hash => {
+    knex("users").insert({
+        username: req.body.username,
+        email: req.body.email,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
+        password_hash: hash
+    })
+    .then(cb);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+}
+
+function getUserIdFromEmail(req, res) {
+  knex
+    .select()
+    .from('users')
+    .where('email', req.body.email)
+    .then(rows => {
+      req.session.userId = rows[0].id;
+      res.redirect("/");
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
 app.post("/register", (req, res) => {
-  // Display error messages directly on page with jQUERY (app.js):
-  // 1. email/username already registered
-  // 2. Invalid email/username
-  // 3. Invalid password
+  if (checkEmptyFields(req)) {
+    res.status(400).send("Please fill out all the fields.");
+  } else {
+    checkUsernameReg(req, res, function() {
+      checkEmailReg(req, res, function() {
+        insertUserInfoDb(req, function() {
+          getUserIdFromEmail(req, res);
+        });
+      });
+    });
+  }
 });
 
 // logs in user by user_id, which is entered into the email field on client side.
 app.post("/login", (req, res) => {
-  if(req.body.email){
-    req.session.userId = req.body.email;
-    console.log(`Logged in user ${req.body.email}`);
+  if(req.body.email) {
+    getUserIdFromEmail(req, res);
+  } else {
+    res.redirect("/");
   }
-  res.redirect("/");
 });
 
 // remove session cookie and redirect to main page

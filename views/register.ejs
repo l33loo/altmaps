@@ -10,6 +10,8 @@
   <title>Register - Altmaps</title>
 
   <% include partials/_styles-and-scripts %>
+  <script type="text/javascript" src="/scripts/register.js"></script>
+  <script type="text/javascript" src="../server.js"></script>
 
 </head>
 
@@ -26,22 +28,26 @@
       </div>
 
       <div class="ui container segment">
-        <form action="/login" method="POST"class="ui form">
+        <form action="/register" method="POST"class="ui form">
+          <div class="field">
+            <label>Username</label>
+            <input id="username" type="text" name="username" placeholder="Username">
+          </div>
           <div class="field">
             <label>Email</label>
-            <input type="text" name="email" placeholder="you@...">
+            <input id="email" type="text" name="email" placeholder="you@...">
           </div>
           <div class="field">
             <label>First Name</label>
-            <input type="text" name="first-name" placeholder="First Name">
+            <input id="firstname" type="text" name="first-name" placeholder="First Name">
           </div>
           <div class="field">
             <label>Last Name</label>
-            <input type="text" name="last-name" placeholder="Last Name">
+            <input id="lastname" type="text" name="last-name" placeholder="Last Name">
           </div>
           <div class="field">
             <label>Password</label>
-            <input type="password" name="password" placeholder="Enter Password">
+            <input id="password" type="password" name="password" placeholder="Enter Password">
           </div>
           <button class="ui button" type="submit">Submit</button>
         </form>

@@ -29,6 +29,15 @@ module.exports = (knex) => {
       });
   });
 
+  router.get("/json", (req, res) => {
+    knex
+      .select()
+      .from("users")
+      .then((results) => {
+        res.json(results);
+      });
+  });
+
   // VIEW USER PROFILE
   router.get("/:userID", (req, res) => {
     // if (exists) {
