@@ -103,22 +103,16 @@ app.get("/register", (req, res) => {
   }
 });
 
-
-//works
 function checkEmptyFields(req, res) {
   console.log(req.body.username);
-  if (req.body.username === "" ||
-      req.body.email === "" ||
-      req.body.firstName === "" ||
-      req.body.lastName === "" ||
-      req.body.password === "") {
-    return true;
-  } else {
-    return false;
-  }
+  return (!req.body.username ||
+    !req.body.email ||
+    !req.body.firstName ||
+    !req.body.lastName ||
+    !req.body.password)
 }
 
-// Calls callback if username does not already exist in db.
+// Calls callback if username does not already exist.
 function checkUsernameReg(req, res, callback) {
   knex
     .select()
