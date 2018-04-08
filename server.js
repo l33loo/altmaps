@@ -173,16 +173,16 @@ bcrypt.hash(req.body.password, 12)
 
 function getUserIdFromEmail(req, res) {
   knex
-          .select()
-          .from('users')
-          .where('email', req.body.email)
-          .then(rows => {
-            req.session.userId = rows[0].id;
-            res.redirect("/");
-          })
-          .catch(err => {
-            console.error(err);
-          });
+    .select()
+    .from('users')
+    .where('email', req.body.email)
+    .then(rows => {
+      req.session.userId = rows[0].id;
+      res.redirect("/");
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
 
 app.post("/register", (req, res) => {
@@ -192,15 +192,11 @@ app.post("/register", (req, res) => {
     checkUsernameReg(req, res, function() {
       checkEmailReg(req, res, function() {
         insertUserInfoDb(req, function() {
-          console.log("WHHHAAAA!!");
+          getUserIdFromEmail(req, res);
         });
       });
     });
   }
-
-//
-//       getUserIdFromEmail(req, res);
-//   }
 });
 
 // logs in user by user_id, which is entered into the email field on client side.
