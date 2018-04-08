@@ -7,8 +7,21 @@ module.exports = (knex) => {
 
   router.get("/:id/json", (req, res) => {
     knex
-      .select("*")
+      .select(
+        "map_pins.id",
+        "map_id",
+        "place_id",
+        "latitude",
+        "longitude",
+        "title",
+        "description",
+        "category",
+        "color",
+        "created_at",
+        "updated_at",
+        "username")
       .from("map_pins")
+      .leftOuterJoin('users', 'created_by', 'users.id')
       .where({map_id: req.params.id})
       .then((results) => {
         res.json(results);
