@@ -33,17 +33,32 @@ module.exports = (knex) => {
     }
 
   });
-
+function getPage(req, res, url) {
+  knex
+    .select()
+    .from('users')
+    .where('id', req.session.userId)
+    .then(rows => {
+      res.render(url, {loggedIn: req.loggedIn, userId: rows[0].username});
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
   // MAPS
   router.get("", (req, res) => {
-    console.log("req.loggedIn: ", req.loggedIn);
-    res.render("index", {loggedIn: req.loggedIn, userId: req.session.userId});
+    getPage(req, res, "index");
   });
 
   // CREATE MAP (not sure how it works with Google Maps API)
   router.get("/new", (req, res) => {
-    res.render("create_map", {loggedIn: req.loggedIn, userId: req.session.userId});
+    getPage(req, res, "create_map")
   });
+
+
+// knex.select('*')
+// .from('users')
+// .fullOuterJoin('accounts', 'users.id', 'accounts.user_id')
 
   // MAP
   router.get("/:mapID", (req, res) => {
