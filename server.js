@@ -159,16 +159,15 @@ bcrypt.hash(req.body.password, 12)
     knex("users").insert({
         username: req.body.username,
         email: req.body.email,
-        first_name: req.body.firstName,
-        last_name: req.body.lastName,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
         password_hash: hash
     })
     .then(cb);
   })
   .catch(err => {
-            console.error(err);
-          });
-
+    console.error(err);
+  });
 }
 
 function getUserIdFromEmail(req, res) {
@@ -203,17 +202,6 @@ app.post("/register", (req, res) => {
 app.post("/login", (req, res) => {
   if(req.body.email) {
     getUserIdFromEmail(req, res);
-    // knex
-    //   .select()
-    //   .from('users')
-    //   .where('email', req.body.email)
-    //   .then(rows => {
-    //     req.session.userId = rows[0].id;
-    //     res.redirect("/");
-    //   })
-    //   .catch(err => {
-    //     console.error(err);
-    //   });
   } else {
     res.redirect("/");
   }
