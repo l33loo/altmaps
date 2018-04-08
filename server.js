@@ -14,6 +14,7 @@ const knexConfig  = require("./knexfile");
 const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
+const bcrypt      = require('bcrypt');
 
 // Seperated Routes for each Resource
 const mapsRoutes = require("./routes/maps");
@@ -102,12 +103,13 @@ app.get("/register", (req, res) => {
   }
 });
 
-function checkEmptyFields() {
-  if (!$("input.username").val() ||
-      !$("input.email").val() ||
-      !$("input.first-name").val() ||
-      !$("input.last-name").val() ||
-      !$("input.password").val()) {
+function checkEmptyFields(info) {
+  console.log(typeof info.username);
+  if (info.username === "" ||
+      info.email === "" ||
+      info.firstName === "" ||
+      info.lastName === "" ||
+      info.password === "") {
     return true;
   } else {
     return false;
@@ -116,12 +118,14 @@ function checkEmptyFields() {
 
   function checkUsernameReg(username) {
     console.log("checkUsernameReg");
-    knex('users')
+    knex
       .select()
+      .from('users')
       .where('username', username)
       .then(user => {
         console.log('user: ' + user);
-        return Boolean(user.username);
+        console.log(user[0]);
+        return Boolean(user[0]);
       })
       .catch(err => {
         console.error(err);
@@ -130,56 +134,39 @@ function checkEmptyFields() {
 
   function checkEmailReg(email) {
     console.log("checkEmailReg");
-    knex('users')
+    knex
       .select()
+      .from('users')
       .where('email', email)
-        .then(user => {
-          return Boolean(user.email);
+      .then(user => {
+        return Boolean(user[0]);
       })
       .catch(err => {
         console.error(err);
     });
   }
 
-function errorMsg(msg) {
-  console.log(errorMsg);
-  $('form').delete("div.error");
-            // event.preventDefault();
-            // $('button').attr('disabled', 'disabled');
-            var errorMsg = $("<div class='error'>").text(msg);
-            $('form').append(errorMsg);
-}
-
 function successReg(info) {
   console.log("successReg");
-  $('form').delete("div.error");
-      bcrypt.hash(info.password, 12).then(function(hash) {
-        knex('users').insert({
+      bcrypt.hash(info.password, 12)
+      .then(hash => {
+        knex('users')
+        .insert({
           username: info.username,
           email: info.email,
           first_name: info.firstName,
           last_name: info.lastName,
           password_hash: hash
-        })
-        .then( // fetch userID
-          req.session.userId = info.email)
-        .then(res.redirect("/maps/json"));
-      });
+        });
+      })
+      .catch(err => {
+          console.error(err);
+        });
 }
 
-  function validateForSubmit(username, email) {
-    console.log("validateForSubmit");
-    if (checkEmptyFields()) {
-      errorMsg("Please fill out all the fields.");
-    } else if (checkUsernameReg(username)) {
-      errorMsg("This username is already registered.");
 
-    } else if (checkEmailReg(email)) {
-      errorMsg("This email is already registered. Please log in instead.");
-    } else {
-      successReg(req.body);
-    }
-  }
+
+
 
 // function getUserNrFromEmail(givenEmail) {
 //   const usersArr = Object.getOwnPropertyNames(usersDb);
@@ -191,7 +178,18 @@ function successReg(info) {
 // }
 
 app.post("/register", (req, res) => {
-  validateForSubmit(req.body.username, req.body.email);
+  if (checkEmptyFields(req.body)) {
+    console.log(checkEmptyFields(req.body));
+      res.status(400).send("Please fill out all the fields.");
+    } else if (checkUsernameReg(req.body.username)) {
+      res.status(400).send("This username is already registered.");
+    } else if (checkEmailReg(req.body.email)) {
+      res.status(400).send("This email is already registered. Please log in instead.");
+    } else {
+      successReg(req.body);
+      req.session.userId = req.body.email;
+      res.redirect("/maps");
+    }
   // Display error messages directly on page with jQUERY (app.js):
   // 1. email/username already registered
   // 2. Invalid email/username
