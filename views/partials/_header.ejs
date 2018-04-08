@@ -6,7 +6,7 @@
     <div class="right menu">
       <% if(loggedIn) { %>
         <div class="item">
-          <div>Welcome Back <%= userId %></div>
+          <div>Welcome Back <%= username %></div>
         </div>
         <form action="/logout" method="POST" >
           <button class="ui button" type="submit">Log Out</button>
