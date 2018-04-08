@@ -38,14 +38,14 @@ module.exports = (knex) => {
       });
   });
 
-function getPage(req, res, views, uID) {
+function getPage(req, res, uID) {
   if (req.loggedIn) {
     knex("users")
       .select()
-      .where("id", req.session.userId)
+      .where("id", uID)
       .limit(1)
       .then(rows => {
-        res.render(views, {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
+        res.render("user", {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
       })
       .catch(err => {
         console.error(err);
@@ -56,11 +56,11 @@ function getPage(req, res, views, uID) {
 }
 
   router.get("/profile", (req, res) => {
-    getPage(req, res, "user", req.session.userId);
+    getPage(req, res, req.session.userId);
   })
   // VIEW USER PROFILE
   router.get("/:userId", (req, res) => {
-    getPage(req, res, "user", req.params.userId);
+    getPage(req, res, req.params.userId);
   });
 
   // EDIT USER PROFILE via AJAX (app.js) (PUT "/users/:userID");
