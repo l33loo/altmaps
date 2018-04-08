@@ -19,7 +19,8 @@ module.exports = (knex) => {
         "color",
         "created_at",
         "updated_at",
-        "username")
+        "username",
+        "created_by")
       .from("map_pins")
       .leftOuterJoin('users', 'created_by', 'users.id')
       .where({map_id: req.params.id})
