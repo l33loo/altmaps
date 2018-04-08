@@ -199,18 +199,21 @@ app.post("/register", (req, res) => {
 
 // logs in user by user_id, which is entered into the email field on client side.
 app.post("/login", (req, res) => {
-  if(req.body.email){
-    const userIdFromEmail = knex
+  if(req.body.email) {
+    knex
       .select()
       .from('users')
       .where('email', req.body.email)
-      .then(user => {
-        return user[0].id;
-      });
-    // req.session.userId = userIdFromEmail;
-    console.log(`Logged in user ${req.body.email}`);
+      .asCallback(function(err, rows) {
+        if (err) {
+          return console.error(err);
+        }
+        req.session.userId = rows[0].id;
+        res.redirect("/");
+    });
+  } else {
+    res.redirect("/");
   }
-  res.redirect("/");
 });
 
 // remove session cookie and redirect to main page
