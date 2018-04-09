@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "local": "./node_modules/.bin/nodemon --ignore public/",
-    "knex": "./node_modules/.bin/knex"
+    "knex": "./node_modules/.bin/knex",
+    "eslint": "./node_modules/.bin/eslint --ignore-path ./.eslint-ignore ./"
   },
   "author": "Lighthouse Labs",
   "license": "ISC",
@@ -26,7 +27,8 @@
     "semantic-ui": "^2.3.1"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3",
-    "sqlite3": "^3.1.4"
+    "eslint": "^3.19.0",
+    "eslint-config-lighthouselabs": "github:lighthouse-labs/eslint-config-lighthouselabs",
+    "nodemon": "^1.17.3"
   }
 }
