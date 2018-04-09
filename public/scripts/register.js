@@ -12,7 +12,7 @@ $(document).ready(function() {
       first_name: $inputs[2],
       last_name: $inputs[3],
       password: $inputs[4]
-    }
+    };
 
     $.post("/register", data, function(response) {
       $("span.error").remove();
