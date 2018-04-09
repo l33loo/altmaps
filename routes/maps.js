@@ -17,8 +17,8 @@ module.exports = (knex) => {
         "description",
         "category",
         "color",
-        "created_at",
-        "updated_at",
+        "map_pins.created_at",
+        "map_pins.updated_at",
         "username",
         "created_by")
       .from("map_pins")
