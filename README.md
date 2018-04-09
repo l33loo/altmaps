@@ -11,6 +11,22 @@ This project served as practice with full-stack development.
 3. Authenticated users can favorite, create, and edit maps.
 4. Registered users have profiles that indicate their favourite maps and the maps they've contributed to.
 
+!["Splash Screen"](https://github.com/thelornenelson/tiny-app/blob/master/docs/main-splash.png)
+!["Map Listing"](https://github.com/thelornenelson/tiny-app/blob/master/docs/map-listing.png)
+!["Map detailed view"](https://github.com/thelornenelson/tiny-app/blob/master/docs/map-pins-view.png)
+!["Editing pin"](https://github.com/thelornenelson/tiny-app/blob/master/docs/map-edit-pin.png)
+!["User Profile"](https://github.com/thelornenelson/tiny-app/blob/master/docs/user-profile.png)
+
+## Getting Started
+
+1. Clone this repository.
+2. Install dependencies using the `npm install` command.
+3. Create a new postgresql database named `altmaps` and make sure there is a correctly configured `.env` file in the root project folder. Example file `.env.example` is included for reference.
+4. Create database schema by running `knex migrate:latest`
+5. Populate database with seed data by running `knex seed:run`
+6. Start the web server using the `npm run local` command. The app will be served at <http://localhost:8080/>.
+7. Go to <http://localhost:8080/> in your browser.
+
 ## Dependencies
 
 - Node 5.10.x or above
