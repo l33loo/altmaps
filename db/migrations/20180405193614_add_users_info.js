@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
     knex.schema.withSchema('public').table('users', function(table) {
       table.renameColumn('name', 'first_name');
       table.string('last_name');
-      table.string('email').unique();
+      table.string('email');
       table.string('password_hash');
       table.timestamps(true, true);
     })
