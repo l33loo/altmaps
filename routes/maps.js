@@ -201,22 +201,19 @@ function getPage(req, res, views) {
   router.put("/:mapID/:pinID" /*or just '' ? */, (req, res) => {
     //if (user logged in)...
     if(req.loggedIn){
-      console.log("Should be putting pin", req.params.pinID);
-
-      // there's something wrong with this query??
       knex("map_pins")
-      .where("id",  req.params.pinID)
-      .update({
-        latitude: req.body.latitude,
-        longitude: req.body.longitude,
-        title: req.body.title,
-        description: req.body.description
-      })
-      .then(res.status(201).send())
-      .catch(function(err) {
-        console.error(err);
-        res.status(500).send();
-      });
+        .update({
+          latitude: req.body.latitude,
+          longitude: req.body.longitude,
+          title: req.body.title,
+          description: req.body.description
+        })
+        .where("id",  req.params.pinID)
+        .then(res.status(201).send())
+        .catch(function(err) {
+          console.error(err);
+          res.status(500).send();
+        });
     } else {
       res.status(401).send();
     }

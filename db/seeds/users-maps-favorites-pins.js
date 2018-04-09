@@ -2,7 +2,7 @@ exports.seed = function(knex, Promise) {
   return knex.raw('TRUNCATE favorite_maps, map_pins, maps, users RESTART IDENTITY CASCADE;')
     .then(function () {
       return Promise.all([
-        knex('users').insert({first_name: 'Andrew', email: 'andre@andrew.andrew', username: 'theLorneNelson'}),
+        knex('users').insert({first_name: 'Andrew', email: 'andrew@andrew.andrew', username: 'theLorneNelson'}),
         knex('users').insert({first_name: 'Tess', email: 'tess@tess.tess', username: 'tesstess'}),
         knex('users').insert({first_name: 'Lila', email: 'lila@lila.lila', username: 'l33loo'})
       ]);

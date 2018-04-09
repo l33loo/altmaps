@@ -270,7 +270,8 @@ initMap = function() {
       console.log('data: ', data);
       $.ajax({
           method: "PUT",
-          url: "/maps/" + $(this).data("map-id") + "/" + pin.placeId
+          url: "/maps/" + $(this).data("map-id") + "/" + pin.placeId,
+          data: data
         }).done( function() {
           getPins()
         });
