@@ -170,7 +170,7 @@ function getUserIdFromEmail(req, res) {
     .where('email', req.body.email)
     .then(rows => {
       req.session.userId = rows[0].id;
-      res.status(200).send("/");
+      res.status(200).send();
     })
     .catch(err => {
       console.error(err);
@@ -194,7 +194,17 @@ app.post("/register", (req, res) => {
 // logs in user by user_id, which is entered into the email field on client side.
 app.post("/login", (req, res) => {
   if(req.body.email) {
-    getUserIdFromEmail(req, res);
+    knex
+    .select()
+    .from('users')
+    .where('email', req.body.email)
+    .then(rows => {
+      req.session.userId = rows[0].id;
+      res.redirect("/");
+    })
+    .catch(err => {
+      console.error(err);
+    });
   } else {
     res.redirect("/");
   }
