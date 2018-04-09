@@ -14,7 +14,9 @@ exports.seed = function(knex, Promise) {
         knex('maps').insert([{created_by: 1, title: 'Map One', description: 'One is the Loneliest Number'},
         {created_by: 1, title: 'Cool Beaches', description: 'And other interesting oceanside features.'},
         {created_by: 2, title: 'Victoria Coffee Spots', description: 'Where are the best places for coffee?'},
-        {created_by: 3, title: 'Indian Adventure', description: 'Adventure awaits!'}])
+        {created_by: 3, title: 'Indian Adventure', description: 'Adventure awaits!'},
+        {created_by: 4, title: 'Lighthouse Campuses', description: 'From Sea to shining Sea'},
+        {created_by: 4, title: 'Far Away Places', description: 'Places that fascinate me but that I will almost certainly never visit'}])
       ]);
     })
     .then(function () {
@@ -25,7 +27,10 @@ exports.seed = function(knex, Promise) {
         knex('favorite_maps').insert({map_id: 2, user_id: 2}),
         knex('favorite_maps').insert({map_id: 3, user_id: 3}),
         knex('favorite_maps').insert({map_id: 4, user_id: 3}),
-        knex('favorite_maps').insert({map_id: 4, user_id: 2})
+        knex('favorite_maps').insert({map_id: 4, user_id: 2}),
+        knex('favorite_maps').insert({map_id: 5, user_id: 2}),
+        knex('favorite_maps').insert({map_id: 5, user_id: 4}),
+        knex('favorite_maps').insert({map_id: 5, user_id: 5})
       ]);
     })
     .then(function() {
@@ -49,7 +54,14 @@ exports.seed = function(knex, Promise) {
         knex('map_pins').insert({map_id: 4, created_by: 5, latitude: 24.6082214, longitude: 73.5669747, title: "Udaipur, Rajasthan", description: "Formerly known as the capital of the Mewar Kingdom."}),
         knex('map_pins').insert({map_id: 4, created_by: 3, latitude: 26.4866459, longitude: 74.511348, title: "Pushkar", description: "Borders the Thar Desert; home to hundreds of temples."}),
         knex('map_pins').insert({map_id: 4, created_by: 1, latitude: 24.9048206, longitude: 74.5515543, title: "Chittorgarh", description: "Very intricate architecture; consists primarily of sandstone and marble."}),
-        knex('map_pins').insert({map_id: 4, created_by: 2, latitude: 26.455216, longitude: 74.6229571, title: "Dhai Din Ka Jhonpra", description: "One of India's oldest Mosques dating from the 1190s."})
+        knex('map_pins').insert({map_id: 4, created_by: 2, latitude: 26.455216, longitude: 74.6229571, title: "Dhai Din Ka Jhonpra", description: "One of India's oldest Mosques dating from the 1190s."}),
+        knex('map_pins').insert({map_id: 5, created_by: 4, latitude: 48.42486413024434, longitude: -123.36280370249631, title: "Victoria", description: "We're actually the best, but don't let on."}),
+        knex('map_pins').insert({map_id: 5, created_by: 4, latitude: 49.25280916141374, longitude: -122.9927531006552, title: "Vancouver", description: "Ok, so this is probably not gastown but at this zoom level, it's close enough."}),
+        knex('map_pins').insert({map_id: 5, created_by: 4, latitude: 51.18053802702715, longitude: -114.08009428020023, title: "Calgary", description: "Maybe? I'm just making this up."}),
+        knex('map_pins').insert({map_id: 5, created_by: 2, latitude: 45.00533373259076, longitude: -62.0468709823665, title: "Halifax", description: "So far away from me..."}),
+        knex('map_pins').insert({map_id: 5, created_by: 2, latitude: 48.914883213132285, longitude: -87.2666049205564, title: "Toronto", description: "Location approximate"}),
+        knex('map_pins').insert({map_id: 5, created_by: 3, latitude: 19.90530127999053, longitude: -95.99817525004534, title: "Mexico", description: "Ha, I wish"}),
+        knex('map_pins').insert({map_id: 6, created_by: 3, latitude: 19.90530127999053, longitude: -95.99817525004534, title: "This is a place", description: "This is a description"})
       ]);
     });
 };
