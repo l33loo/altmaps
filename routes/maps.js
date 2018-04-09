@@ -174,6 +174,22 @@ function getPage(req, res, views) {
     }
   });
 
+  router.delete("/:mapID/:pinID" , (req, res) => {
+    //if (user logged in)...
+    if(req.loggedIn){
+      knex("map_pins")
+        .del()
+        .where("id",  req.params.pinID)
+        .then(res.status(201).send())
+        .catch(function(err) {
+          console.error(err);
+          res.status(500).send();
+        });
+    } else {
+      res.status(401).send();
+    }
+  });
+
   // EDIT MAP via AJAX (PUT "/:mapID") (router.js);
   // when session === maps.userID, in map.ejs
 

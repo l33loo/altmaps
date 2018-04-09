@@ -71,7 +71,9 @@ initMap = function() {
     return bounds;
   }
 
-  function editButtonHandler(index){
+// constructs a function to allow reference to key in currentMap.markers object.
+// bound to on click for edit button in pins list.
+  function editButtonHandler(placeId){
     return function(event){
 
       event.preventDefault();
@@ -81,13 +83,14 @@ initMap = function() {
 
       // basic check to make sure values aren't empty.
       if($inputs[0].value && $inputs[1].value){
-        putPin(currentMap.markers[index], $inputs[0].value, $inputs[1].value)
+        putPin(currentMap.markers[placeId], $inputs[0].value, $inputs[1].value)
       }
 
     }
   }
 
-  function createPlaceListItem(title, description, placeId, index){
+
+  function createPlaceListItem(title, description, placeId){
 
     var $item = $('<div id="list-' + placeId + '" class="item">');
     var $icon = $('<i class="map marker icon">').appendTo($item);
@@ -95,11 +98,12 @@ initMap = function() {
     var $header = $('<div class="header">').appendTo($content);
     var $title = $('<a>').text(title).appendTo($header);
     var $edit = $('<i class="edit icon">').appendTo($header);
+    var $delete = $('<i class="delete icon">').appendTo($header);
     var $description = $('<div class="description">').text(description).appendTo($content);
 
     $title.on('click', function(){
 
-      google.maps.event.trigger(currentMap.markers[index], 'click');
+      google.maps.event.trigger(currentMap.markers[placeId], 'click');
 
     });
 
@@ -112,9 +116,28 @@ initMap = function() {
       var $formDescription = $('<input type="text" name="description" placeholder="Description">').val($description.text()).appendTo($form);
       var $formEdit = $('<button class="ui button" type="submit">Edit</button>').appendTo($form);
 
-      $formEdit.on('click', editButtonHandler(index));
+      $formEdit.on('click', editButtonHandler(placeId));
 
       $content.replaceWith($newContent);
+    });
+
+    $delete.on('click', function(){
+      // replace description with "are you sure" double check
+      var $newDescription = $('<div class="description">');
+      var $deleteButton = $('<button class="ui button">Yes, delete it!</button>').appendTo($newDescription);
+      var $cancelButton = $('<button class="ui button">No, no, keep it!</button>').appendTo($newDescription);
+      $description.replaceWith($newDescription);
+
+      $deleteButton.on('click', function(event){
+        event.preventDefault();
+        deletePin(currentMap.markers[placeId]);
+      })
+
+      $cancelButton.on('click', function(event){
+        event.preventDefault();
+        $newDescription.replaceWith($description);
+      });
+
     });
 
     return $item;
@@ -124,8 +147,8 @@ initMap = function() {
 
     var $newList = $('<div id="pins-list" class="ui list">');
 
-    places.forEach(function(place, index){
-      createPlaceListItem(place.title, place.description, place.id, index).appendTo($newList);
+    places.forEach(function(place){
+      createPlaceListItem(place.title, place.description, place.id).appendTo($newList);
     });
 
     $elm.replaceWith($newList);
@@ -193,7 +216,7 @@ initMap = function() {
           currentMap.infoWindow.open(currentMap.map, newMarker);
         });
 
-        currentMap.markers.push(newMarker);
+        currentMap.markers[newMarker.placeId] = newMarker;
       });
 
       populatePlaceList(currentMap.pins, $('#pins-list'));
@@ -206,6 +229,7 @@ initMap = function() {
     });
   }
 
+  // used for adding new pins
   function postPin(pin, title, description) {
 
       var data = {
@@ -221,8 +245,8 @@ initMap = function() {
       });
   }
 
+  // used for editing pins
   function putPin(pin, title, description) {
-    console.dir(pin);
       var data = {
 
         latitude: pin.position.lat(),
@@ -231,14 +255,23 @@ initMap = function() {
         description: description
 
       };
-      console.log('data: ', data);
+
       $.ajax({
           method: "PUT",
-          url: "/maps/" + $(this).data("map-id") + "/" + pin.placeId,
+          url: "/maps/" + currentMap.mapId + "/" + pin.placeId,
           data: data
         }).done( function() {
           getPins()
         });
+  }
+
+  function deletePin(pin){
+    $.ajax({
+        method: "DELETE",
+        url: "/maps/" + currentMap.mapId + "/" + pin.placeId
+      }).done( function() {
+        getPins()
+      });
   }
 
   currentMap.mapId = getMapId();
@@ -250,15 +283,15 @@ initMap = function() {
   });
 
   currentMap.infoWindow = new google.maps.InfoWindow();
-  currentMap.markers = [];
+  currentMap.markers = {};
 
   getPins();
 
-  currentMap.markers.forEach(function(marker){
-    if(marker.placeId === 9){
-      $(marker).click();
-    }
-  })
+  // currentMap.markers.forEach(function(marker){
+  //   if(marker.placeId === 9){
+  //     $(marker).click();
+  //   }
+  // })
 
   google.maps.event.addListener(currentMap.map, 'click', function(event) {
     var marker = new google.maps.Marker({
