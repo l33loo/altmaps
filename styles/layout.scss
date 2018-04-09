@@ -76,7 +76,7 @@ form.ui.form.nav-bar.hidden {
 }
 
 ui vertical divider {
-  position: relative
+  position: relative;
 }
 
 i.heart:hover {
@@ -84,6 +84,15 @@ i.heart:hover {
 }
 
 i.heart.red {
+  color: red;
+}
+
+img#profile-pic {
+  width: 100%;
+  max-width: 300px;
+}
+
+span.error {
   color: red;
 }
 
