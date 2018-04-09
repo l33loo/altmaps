@@ -90,15 +90,14 @@ initMap = function() {
   }
 
 
-  function createPlaceListItem(title, description, placeId){
+  function createPlaceListItem(title, description, placeId, loggedIn){
 
     var $item = $('<div id="list-' + placeId + '" class="item">');
     var $icon = $('<i class="map marker icon">').appendTo($item);
     var $content = $('<div class="content">').appendTo($item);
     var $header = $('<div class="header">').appendTo($content);
     var $title = $('<a>').text(title).appendTo($header);
-    var $edit = $('<i class="edit icon">').appendTo($header);
-    var $delete = $('<i class="delete icon">').appendTo($header);
+
     var $description = $('<div class="description">').text(description).appendTo($content);
 
     $title.on('click', function(){
@@ -107,38 +106,44 @@ initMap = function() {
 
     });
 
-    $edit.on('click', function(){
-      //edit place by replacing listing with form.
+     // only show edit and delete icons if user is logged in. This is purely cosmetic: actual edit/delete security is handled serverside.
+    if(loggedIn){
+      var $edit = $('<i class="edit icon">').appendTo($header);
+      var $delete = $('<i class="delete icon">').appendTo($header);
 
-      var $newContent = $('<div class="content">');
-      var $form = $('<form class="ui form">').appendTo($newContent);
-      var $formTitle = $('<input type="text" name="title" placeholder="Pin Title">').val($title.text()).appendTo($form);
-      var $formDescription = $('<input type="text" name="description" placeholder="Description">').val($description.text()).appendTo($form);
-      var $formEdit = $('<button class="ui button" type="submit">Edit</button>').appendTo($form);
+      $edit.on('click', function(){
+        //edit place by replacing listing with form.
 
-      $formEdit.on('click', editButtonHandler(placeId));
+        var $newContent = $('<div class="content">');
+        var $form = $('<form class="ui form">').appendTo($newContent);
+        var $formTitle = $('<input type="text" name="title" placeholder="Pin Title">').val($title.text()).appendTo($form);
+        var $formDescription = $('<input type="text" name="description" placeholder="Description">').val($description.text()).appendTo($form);
+        var $formEdit = $('<button class="ui button" type="submit">Edit</button>').appendTo($form);
 
-      $content.replaceWith($newContent);
-    });
+        $formEdit.on('click', editButtonHandler(placeId));
 
-    $delete.on('click', function(){
-      // replace description with "are you sure" double check
-      var $newDescription = $('<div class="description">');
-      var $deleteButton = $('<button class="ui button">Yes, delete it!</button>').appendTo($newDescription);
-      var $cancelButton = $('<button class="ui button">No, no, keep it!</button>').appendTo($newDescription);
-      $description.replaceWith($newDescription);
-
-      $deleteButton.on('click', function(event){
-        event.preventDefault();
-        deletePin(currentMap.markers[placeId]);
-      })
-
-      $cancelButton.on('click', function(event){
-        event.preventDefault();
-        $newDescription.replaceWith($description);
+        $content.replaceWith($newContent);
       });
 
-    });
+      $delete.on('click', function(){
+        // replace description with "are you sure" double check
+        var $newDescription = $('<div class="description">');
+        var $deleteButton = $('<button class="ui button">Yes, delete it!</button>').appendTo($newDescription);
+        var $cancelButton = $('<button class="ui button">No, no, keep it!</button>').appendTo($newDescription);
+        $description.replaceWith($newDescription);
+
+        $deleteButton.on('click', function(event){
+          event.preventDefault();
+          deletePin(currentMap.markers[placeId]);
+        })
+
+        $cancelButton.on('click', function(event){
+          event.preventDefault();
+          $newDescription.replaceWith($description);
+        });
+
+      });
+    }
 
     return $item;
   }
@@ -148,7 +153,7 @@ initMap = function() {
     var $newList = $('<div id="pins-list" class="ui list">');
 
     places.forEach(function(place){
-      createPlaceListItem(place.title, place.description, place.id).appendTo($newList);
+      createPlaceListItem(place.title, place.description, place.id, place.loggedIn).appendTo($newList);
     });
 
     $elm.replaceWith($newList);
