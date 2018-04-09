@@ -17,8 +17,8 @@ module.exports = (knex) => {
         "description",
         "category",
         "color",
-        "created_at",
-        "updated_at",
+        "map_pins.created_at",
+        "map_pins.updated_at",
         "username",
         "created_by")
       .from("map_pins")
@@ -109,6 +109,7 @@ function getPage(req, res, views) {
             .catch();
         })
         .catch(err => {
+          console.error(err);
           res.status(404).send("This maps does not exists.");
         });
 
@@ -122,7 +123,7 @@ function getPage(req, res, views) {
   });
 
 
-  router.post("/new" /*or just '' ? */, (req, res) => {
+  router.post("/new", (req, res) => {
     if(req.loggedIn){
       knex("maps").insert({
 
@@ -132,7 +133,7 @@ function getPage(req, res, views) {
       }).returning("id")
       .then(function(response){
         console.log(response)
-        res.redirect("../")
+        res.redirect("/maps/" + response[0])
       })
       .catch(function(err) {
         console.error(err);
@@ -181,7 +182,7 @@ function getPage(req, res, views) {
     if(req.loggedIn){
       knex("map_pins").insert({
 
-        created_by: req.session.user_id,
+        created_by: req.session.userId,
         map_id: req.params.mapID,
         latitude: req.body.latitude,
         longitude: req.body.longitude,

@@ -48,6 +48,7 @@ function getPage(req, res, uID) {
         res.render("user", {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
       })
       .catch(err => {
+        console.error(err);
         res.status(404).send(`Please log in to view user profiles.`);
       });
   } else {
