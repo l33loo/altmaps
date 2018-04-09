@@ -32,18 +32,44 @@ module.exports = (knex) => {
 
   router.get("/json", (req, res) => {
     if(req.loggedIn){
-      // SELECT * FROM favorite_maps RIGHT JOIN maps ON favorite_maps.map_id = maps.id AND favorite_maps.user_id = 1 ORDER BY maps.id
-      //SELECT * FROM maps LEFT JOIN favorite_maps ON maps.id = favorite_maps.map_id AND favorite_maps.user_id = ?
+
+      // selects maps and favourite status for current user
       knex.raw("SELECT * FROM favorite_maps RIGHT JOIN maps ON favorite_maps.map_id = maps.id AND favorite_maps.user_id = ? ORDER BY maps.id", [req.session.userId])
         .then((results) => {
-          res.json(results.rows);
+          // to avoid the mother of all SQL queries, selects contributor count for each map.
+          knex.raw("SELECT map_id, COUNT(DISTINCT created_by) AS contributors FROM map_pins GROUP BY map_id ORDER BY map_id")
+          .then((contributorsResults) => {
+
+            // add the contributor counts to each result row (aka map)
+            // note we need to reference .rows because we used knex.raw for the query
+            results.rows.forEach((row, index) => {
+              row.contributors = contributorsResults.rows[index].contributors;
+            });
+
+            // send response as json.
+            res.json(results.rows);
+          });
       });
     } else {
+
+      // if not logged in, just select all maps (no favourite data if no user)
       knex
         .select("*")
         .from("maps")
         .then((results) => {
-          res.json(results);
+          // select contributor count
+          knex.raw("SELECT map_id, COUNT(DISTINCT created_by) AS contributors FROM map_pins GROUP BY map_id ORDER BY map_id")
+          .then((contributorsResults) => {
+
+            // add the contributor counts to each result row (aka map)
+            // note that here results is the array of rows because we used knex queries.
+            results.forEach((row, index) => {
+              row.contributors = contributorsResults.rows[index].contributors;
+            });
+
+            // send response as json.
+            res.json(results);
+          });
       });
     }
 

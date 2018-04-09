@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-  function createMapCard(id, title, created_by, updated_at, description, favorite){
+  function createMapCard(id, title, created_by, updated_at, description, favorite, contributors){
 
     var $card = $('<div class="card">').data({mapId: id});
     $('<div class="image"><img src="/images/map_placeholder.jpg"></div>').appendTo($card);
@@ -15,7 +15,8 @@ $(document).ready(function(){
 
     var $extraContent = $('<div class="extra content">').appendTo($card);
     var $rightFooter = $('<span class="right floated">').text(updated_at).appendTo($extraContent);
-    var $leftFooter = $('<span>').text("75 Contributors").appendTo($extraContent);
+    var plural = contributors == 1 ? "" : "s";
+    var $leftFooter = $('<span>').text(contributors + " Contributor" + plural).appendTo($extraContent);
     var $icon = $('<i class="user icon"></i>').insertBefore($leftFooter);
 
     if(favorite){
@@ -35,7 +36,7 @@ $(document).ready(function(){
         favorite = map.user_id;
         //this will either be null, if map isn't in user's favorites, or equal to user's id.
       }
-      createMapCard(map.id, map.title, map.created_by, map.updated_at.slice(0,10), map.description, map.user_id).appendTo($parent);
+      createMapCard(map.id, map.title, map.created_by, map.updated_at.slice(0,10), map.description, map.user_id, map.contributors).appendTo($parent);
     });
 
   }
