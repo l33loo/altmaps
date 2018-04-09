@@ -27,17 +27,21 @@
 
       <% if(loggedIn) { %>
       <div class="ui container segment">
-        <form action="/maps/new" method="POST"class="ui form">
-          <div class="field">
-            <label>Map Title</label>
-            <input type="text" name="title" placeholder="Greatest Spots for...">
+        <div class="ui grid">
+          <div class="eight wide centered column">
+            <form action="/maps/new" method="POST"class="ui form">
+              <div class="field">
+                <label>Map Title</label>
+                <input type="text" name="title" placeholder="Greatest Spots for...">
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <input type="text" name="description" placeholder="Any other details?">
+              </div>
+              <button class="ui primary button" type="submit">Submit</button>
+            </form>
           </div>
-          <div class="field">
-            <label>Description</label>
-            <input type="text" name="description" placeholder="Any other details?">
-          </div>
-          <button class="ui primary button" type="submit">Submit</button>
-        </form>
+        </div>
       </div>
       <% } else { %>
         <div class="ui container relaxed segment">

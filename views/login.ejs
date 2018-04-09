@@ -27,17 +27,21 @@
       </div>
 
       <div class="ui container segment">
-        <form action="/login" method="POST"class="ui form">
-          <div class="field">
-            <label>Email</label>
-            <input id="logemail" type="text" name="email" placeholder="you@...">
+        <div class="ui grid">
+          <div class="eight wide centered column">
+            <form action="/login" method="POST"class="ui form">
+              <div class="field">
+                <label>Email</label>
+                <input id="logemail" type="text" name="email" placeholder="you@...">
+              </div>
+              <div class="field">
+                <label>Password</label>
+                <input id="logpass" type="password" name="password" placeholder="Enter Password">
+              </div>
+              <button class="ui primary button" type="submit">Submit</button>
+            </form>
           </div>
-          <div class="field">
-            <label>Password</label>
-            <input id="logpass" type="password" name="password" placeholder="Enter Password">
-          </div>
-          <button class="ui primary button" type="submit">Submit</button>
-        </form>
+        </div>
       </div>
 
       <% include partials/_footer %>

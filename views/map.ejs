@@ -33,13 +33,19 @@
       <div class="ui container segment">
         <div class="ui grid">
           <div class="ten wide column">
-            <h2><%= title %></h2>
+            <h2 class="ui dividing header"><%= title %></h2>
             <div id="map"></div>
           </div>
           <div class="six wide column">
-          <div><%= description %></div>
-            <h3>Pins</h3>
-            <div id="pins-list" class="ui list">
+            <div class="ui top attached segment">
+              <%= description %>
+            </div>
+            <div class="ui purple attached segment">
+              <h3>Pins</h3>
+            </div>
+            <div class="ui bottom attached segment">
+              <div id="pins-list" class="ui list">
+            </div>
             </div>
           </div>
         </div>
