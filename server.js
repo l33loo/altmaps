@@ -152,8 +152,8 @@ bcrypt.hash(req.body.password, 12)
     knex("users").insert({
         username: req.body.username,
         email: req.body.email,
-        first_name: req.body.firstname,
-        last_name: req.body.lastname,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         password_hash: hash
     })
     .then(cb);
