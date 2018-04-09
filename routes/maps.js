@@ -80,38 +80,32 @@ module.exports = (knex) => {
 
   });
 
-function getPage(req, res, views) {
-  if (req.loggedIn) {
-    knex("users")
-      .select()
-      .where("id", req.session.userId)
-      .limit(1)
-      .then(rows => {
-        res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId, username: rows[0].username});
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  } else {
-    res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId});
+  // Renders web page
+  function getPage(req, res, views) {
+    if (req.loggedIn) {
+      knex("users")
+        .select()
+        .where("id", req.session.userId)
+        .limit(1)
+        .then(rows => {
+          res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId, username: rows[0].username});
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } else {
+      res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId});
+    }
   }
-}
-  // MAPS
+
   router.get("", (req, res) => {
     getPage(req, res, "index");
   });
 
-  // CREATE MAP (not sure how it works with Google Maps API)
   router.get("/new", (req, res) => {
     getPage(req, res, "create_map")
   });
 
-
-// knex.select('*')
-// .from('users')
-// .fullOuterJoin('accounts', 'users.id', 'accounts.user_id')
-
-  // MAP
   router.get("/:mapID", (req, res) => {
     let templateVars = new Object;
     knex("maps")
@@ -147,14 +141,6 @@ function getPage(req, res, views) {
       console.error(err);
       res.status(404).send("This maps does not exist.");
     });
-
-
-    // Do we instead want to redirect to  with a flash error message on the page or alert?
-    // } else if (/* map doesn't exist */) {
-      // res.status(404).send("<html><body>This map does not exist. Please try again.</body></html>\n");
-    // } else /* if user not authorized */ {
-    //   res.status(403).send(`<html><body>Forbidden.</body></html>\n`);
-    // }
   });
 
 
@@ -209,7 +195,6 @@ function getPage(req, res, views) {
   });
 
   router.delete("/:mapID/:pinID" , (req, res) => {
-    //if (user logged in)...
     if(req.loggedIn){
       knex("map_pins")
         .del()
@@ -224,12 +209,7 @@ function getPage(req, res, views) {
     }
   });
 
-  // EDIT MAP via AJAX (PUT "/:mapID") (router.js);
-  // when session === maps.userID, in map.ejs
-
-
-  router.post("/:mapID" /*or just '' ? */, (req, res) => {
-    //if (user logged in)...
+  router.post("/:mapID", (req, res) => {
     if(req.loggedIn){
       knex("map_pins").insert({
 
@@ -250,8 +230,7 @@ function getPage(req, res, views) {
     }
   });
 
-  router.put("/:mapID/:pinID" /*or just '' ? */, (req, res) => {
-    //if (user logged in)...
+  router.put("/:mapID/:pinID", (req, res) => {
     if(req.loggedIn){
       knex("map_pins")
         .update({

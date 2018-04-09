@@ -49,27 +49,6 @@ app.use((req, res, next) => {
   next();
 });
 
-//This is Don's custom middleware
-//After session is configured, but BEFORE routes:
-//Check to see if there is a user_id in req.session
-//If there is, set req.loggedIn and look up the user from the db
-//Save user in a key on the request object, making it available
-//to routes later on
-// app.use((req, res, next) => {
-//   req.loggedIn = Boolean(req.session.user_id);
-//   if (req.loggedIn) {
-//     process.knex('users').select().where('id', req.session.user_id)
-//     .then(user => {
-//       req.user = user[0];
-//       next();
-//     })
-//     .catch(err => {
-//       pino.error("USER WTF: ", err);
-//       next();
-//     });
-//   }
-// });
-
 app.use("/styles", sass({
   src: __dirname + "/styles",
   dest: __dirname + "/public/styles",

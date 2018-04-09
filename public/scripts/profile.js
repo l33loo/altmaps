@@ -48,26 +48,3 @@ $(document).ready(function() {
   getContrib();
 
 });
-
-
-// <div class="ui container segment">
-//         <div class="ui segment">
-//           <h1>-Lila2's profile-</h1>
-//         </div>
-//       <div class="ui segment">
-//         <div class="ui three column very relaxed grid">
-//           <div class="column">
-//             <img src="/images/map_placeholder.jpg">
-//             <p>This is me. I don't have much to say, but now that I think of it, let me tell you about the last burger I ate. That was a year ago. I still dream about it. But now that cows have gone extinct, there isn't much one can do aside from dreaming...</p>
-//           </div>
-//           <div class="ui vertical divider">
-//           </div>
-//           <div class="column" id="fav">
-//             <h2>Favorite Maps</h2>
-//           </div>
-//           <div class="column" id="contrib">
-//             <h2>Contributor on</h2>
-//           </div>
-//         </div>
-//       </div>
-//       </div>

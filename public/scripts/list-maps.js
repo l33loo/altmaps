@@ -50,18 +50,16 @@ $(document).ready(function(){
 
   }
 
-// toggles the "like" heart immediately in the DOM. DB update is handled in the on click handler for the heart icon.
-function toggleFavourite($favorite){
-  if($favorite.data("is-favorite")){
-    $favorite.toggleClass("outline red");
-    $favorite.data({isFavorite: false});
-  } else {
-    $favorite.toggleClass("outline red");
-    $favorite.data({isFavorite: true});
+  // toggles the "like" heart immediately in the DOM. DB update is handled in the on click handler for the heart icon.
+  function toggleFavourite($favorite){
+    if($favorite.data("is-favorite")){
+      $favorite.toggleClass("outline red");
+      $favorite.data({isFavorite: false});
+    } else {
+      $favorite.toggleClass("outline red");
+      $favorite.data({isFavorite: true});
+    }
   }
-
-
-}
 
   function getMaps(){
     $.getJSON("/maps/json").then(function(maps){

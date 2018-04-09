@@ -116,7 +116,6 @@ initMap = function() {
 
       $edit.on('click', function(){
 
-
         //edit place by replacing listing with form.
 
         var $newContent = $('<div class="content">');
@@ -318,12 +317,6 @@ initMap = function() {
 
 
   getPins();
-
-  // currentMap.markers.forEach(function(marker){
-  //   if(marker.placeId === 9){
-  //     $(marker).click();
-  //   }
-  // })
 
   google.maps.event.addListener(currentMap.map, 'click', function(event) {
     var marker = new google.maps.Marker({

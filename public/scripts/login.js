@@ -1,6 +1,5 @@
 $(document).ready(function(){
   $('#logemail').focus();
-
   $('#login-button').on('click', function(){
     $hiddenButtons = $(this).siblings('.button').hide();
     $navForm = $(this).siblings('form').toggleClass('hidden');

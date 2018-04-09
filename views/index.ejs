@@ -14,38 +14,36 @@
 </head>
 <body>
 
-<!-- Following Menu -->
-<% var active = {home: "active", maps: "", profile: ""};
-var hidden = "hidden";  %>
-<% include partials/_header %>
+  <!-- Following Menu -->
+  <% var active = {home: "active", maps: "", profile: ""};
+  var hidden = "hidden";  %>
+  <% include partials/_header %>
 
+  <!-- Page Contents -->
+  <div class="pusher">
+    <div class="ui inverted vertical masthead center aligned segment">
 
-<!-- Page Contents -->
-<div class="pusher">
-  <div class="ui inverted vertical masthead center aligned segment">
+      <% include partials/_top_nav %>
 
-    <% include partials/_top_nav %>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        altmaps
-      </h1>
-      <h2>Sharing your favourite places with the world.</h2>
-      <a href="#map-cards" ><div class="ui huge primary button"><% if(loggedIn) { %>Welcome back, <%= username %> <% } else { %>Get Started <% } %><i class="right arrow icon"></i></div></a>
+      <div class="ui text container">
+        <h1 class="ui inverted header">
+          altmaps
+        </h1>
+        <h2>Sharing your favourite places with the world.</h2>
+        <a href="#map-cards" ><div class="ui huge primary button"><% if(loggedIn) { %>Welcome back, <%= username %> <% } else { %>Get Started <% } %><i class="right arrow icon"></i></div></a>
+      </div>
     </div>
-  </div>
 
-  <div class="ui container segment">
-    <a id="map-cards"></a>
-    <div id="maps-list" class="ui link cards">
-      <!-- we'll want to load these via AJAX eventually -->
+    <div class="ui container segment">
+      <a id="map-cards"></a>
+      <div id="maps-list" class="ui link cards">
+        <!-- we'll want to load these via AJAX eventually -->
 
+      </div>
     </div>
-  </div>
 
-  <% include partials/_footer %>
-</div>
+    <% include partials/_footer %>
+  </div>
 
 </body>
-
 </html>

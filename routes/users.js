@@ -5,6 +5,7 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
+  // json of user's favorite maps
   router.get("/:id/fav/json", (req, res) => {
     knex
       .select("title", "description", "map_id")
@@ -16,7 +17,7 @@ module.exports = (knex) => {
       });
   });
 
-  // Doesn't work because created_by exists in bpth maps and map_pins table (so does title)
+  // json of maps user has contributed to.
   router.get("/:id/contrib/json", (req, res) => {
     knex
       .select("maps.title", "maps.description", "map_id")
@@ -58,7 +59,7 @@ module.exports = (knex) => {
   router.get("/profile", (req, res) => {
     res.redirect(`/users/${req.session.userId}`);
   });
-  // VIEW USER PROFILE
+
   router.get("/:userId", (req, res) => {
     getPage(req, res, req.params.userId);
   });
@@ -77,13 +78,6 @@ module.exports = (knex) => {
       });
     }
   });
-
-  // EDIT USER PROFILE via AJAX (app.js) (PUT "/users/:userID");
-  // when session === maps.userID, in user.ejs
-
-
-
-  // LOGIN via AJAX (app.js); login form in nav bar;
 
   return router;
 }
