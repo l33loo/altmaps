@@ -77,12 +77,12 @@ $(document).ready(function() {
       }
       if (Number(response) === 1) {
         return errMessage(msgOne);
-      }
-      if (Number(response) === 2) {
+      } else if (Number(response) === 2) {
         return errMessage(msgTwo);
-      }
-      if (Number(response) === 3) {
+      } else if (Number(response) === 3) {
         return errMessage(msgThree);
+      } else {
+        return window.location.replace(response);
       }
     });
   });

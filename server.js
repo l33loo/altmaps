@@ -152,8 +152,8 @@ bcrypt.hash(req.body.password, 12)
     knex("users").insert({
         username: req.body.username,
         email: req.body.email,
-        first_name: req.body.firstname,
-        last_name: req.body.lastname,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
         password_hash: hash
     })
     .then(cb);
@@ -170,7 +170,7 @@ function getUserIdFromEmail(req, res) {
     .where('email', req.body.email)
     .then(rows => {
       req.session.userId = rows[0].id;
-      res.redirect("/");
+      res.status(200).send("/");
     })
     .catch(err => {
       console.error(err);
