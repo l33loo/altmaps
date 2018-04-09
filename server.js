@@ -179,6 +179,7 @@ function getUserIdFromEmail(req, res) {
 }
 
 app.post("/register", (req, res) => {
+  console.log("LALLALALLALLLA!!");
   if (checkEmptyFields(req)) {
     res.status(400).send("Please fill out all the fields.");
   } else {
