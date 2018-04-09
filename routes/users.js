@@ -49,10 +49,9 @@ module.exports = (knex) => {
         })
         .catch(err => {
           console.error(err);
-          res.status(401).send(`Please log in to view user profiles.`);
         });
     } else {
-      res.status(401).send(`Please log in to view user profiles.`);
+      res.render("user", {loggedIn: req.loggedIn, username: null, userId: null});
     }
   }
 
