@@ -67,7 +67,7 @@ module.exports = (knex) => {
   router.post("/:userId/about", (req, res) => {
     if(req.loggedIn){
       knex("users").insert({
-        about: req.body.about,
+        about: req.body.about
       }).returning("about")
       .then(function(response){
         res.status(201).send(response[0]);
@@ -80,4 +80,4 @@ module.exports = (knex) => {
   });
 
   return router;
-}
+};

@@ -6,7 +6,7 @@ const PORT        = process.env.PORT || 8080;
 const ENV         = process.env.ENV || "development";
 const express     = require("express");
 const bodyParser  = require("body-parser");
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
 const sass        = require("node-sass-middleware");
 const app         = express();
 
@@ -35,7 +35,7 @@ app.use(cookieSession({
   keys: ["Slowly at first", "as if it hardly meant it", "the snow began to fall."],
 
   // Cookie Options
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  maxAge: 24 * 60 * 60 * 1000
 }));
 
 // checks session and if valid sets req.userLoggedIn = true (or false if not logged in)
@@ -86,7 +86,7 @@ function checkEmptyFields(req, res) {
     !req.body.email ||
     !req.body.first_name ||
     !req.body.last_name ||
-    !req.body.password)
+    !req.body.password);
 }
 
 // Calls callback if username does not already exist.
@@ -121,18 +121,18 @@ function checkEmailReg(req, res, cb) {
     })
     .catch(err => {
       console.error(err);
-  });
+    });
 }
 
 function insertUserInfoDb(req, cb) {
-bcrypt.hash(req.body.password, 12)
+  bcrypt.hash(req.body.password, 12)
   .then(hash => {
     knex("users").insert({
-        username: req.body.username,
-        email: req.body.email,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        password_hash: hash
+      username: req.body.username,
+      email: req.body.email,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      password_hash: hash
     })
     .then(cb);
   })

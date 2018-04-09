@@ -71,8 +71,17 @@ initMap = function() {
     return bounds;
   }
 
-// constructs a function to allow reference to key in currentMap.markers object.
-// bound to on click for edit button in pins list.
+  function deletePin(pin){
+    $.ajax({
+      method: "DELETE",
+      url: "/maps/" + currentMap.mapId + "/" + pin.placeId
+    }).done( function() {
+      getPins();
+    });
+  }
+
+  // constructs a function to allow reference to key in currentMap.markers object.
+  // bound to on click for edit button in pins list.
   function editButtonHandler(placeId){
     return function(event){
 
@@ -83,14 +92,10 @@ initMap = function() {
 
       // basic check to make sure values aren't empty.
       if($inputs[0].value && $inputs[1].value){
-        putPin(currentMap.markers[placeId], $inputs[0].value, $inputs[1].value)
+        putPin(currentMap.markers[placeId], $inputs[0].value, $inputs[1].value);
       }
 
-    }
-  }
-
-  function toggleForm(){
-
+    };
   }
 
   function createPlaceListItem(title, description, placeId, loggedIn){
@@ -151,7 +156,7 @@ initMap = function() {
         $deleteButton.on('click', function(event){
           event.preventDefault();
           deletePin(currentMap.markers[placeId]);
-        })
+        });
 
         $cancelButton.on('click', function(event){
           event.preventDefault();
@@ -173,31 +178,6 @@ initMap = function() {
     });
 
     $elm.replaceWith($newList);
-
-  }
-
-  function getMapId(){
-    var pathname = window.location.pathname;
-    var regex = /maps\/(\d+)\/?\b/;
-    var mapId = regex.exec(pathname);
-    return mapId[1];
-  }
-
-  // adds a blank form to the top of the markers list and returns the jQuery object referencing the form.
-  function addMarkerFormToList($list){
-
-    var $item = $('<div class="item">');
-    var $icon = $('<i class="map marker icon">').appendTo($item);
-    var $content = $('<div class="content">').appendTo($item);
-    var $form = $('<form class="ui form">').appendTo($content);
-    var $title = $('<input type="text" name="title" placeholder="Pin Title">').appendTo($form);
-    var $description = $('<input type="text" name="description" placeholder="Description">').appendTo($form);
-    var $add = $('<button class="ui button" type="submit">Add</button>').appendTo($form);
-
-    $item.prependTo($list);
-    $title.focus();
-
-    return $form;
 
   }
 
@@ -260,50 +240,75 @@ initMap = function() {
     });
   }
 
-  // used for adding new pins
-  function postPin(pin, title, description) {
-
-      var data = {
-
-        latitude: pin.position.lat(),
-        longitude: pin.position.lng(),
-        title: title,
-        description: description
-
-      };
-      $.post("/maps/" + currentMap.mapId, data).done(function() {
-        getPins();
-      });
-  }
-
   // used for editing pins
   function putPin(pin, title, description) {
-      var data = {
+    var data = {
 
-        latitude: pin.position.lat(),
-        longitude: pin.position.lng(),
-        title: title,
-        description: description
+      latitude: pin.position.lat(),
+      longitude: pin.position.lng(),
+      title: title,
+      description: description
 
-      };
+    };
 
-      $.ajax({
-          method: "PUT",
-          url: "/maps/" + currentMap.mapId + "/" + pin.placeId,
-          data: data
-        }).done( function() {
-          getPins()
-        });
-  }
-
-  function deletePin(pin){
     $.ajax({
-        method: "DELETE",
-        url: "/maps/" + currentMap.mapId + "/" + pin.placeId
-      }).done( function() {
-        getPins()
-      });
+      method: "PUT",
+      url: "/maps/" + currentMap.mapId + "/" + pin.placeId,
+      data: data
+    }).done( function() {
+      getPins();
+    });
   }
+
+
+
+
+
+  function getMapId(){
+    var pathname = window.location.pathname;
+    var regex = /maps\/(\d+)\/?\b/;
+    var mapId = regex.exec(pathname);
+    return mapId[1];
+  }
+
+  // adds a blank form to the top of the markers list and returns the jQuery object referencing the form.
+  function addMarkerFormToList($list){
+
+    var $item = $('<div class="item">');
+    var $icon = $('<i class="map marker icon">').appendTo($item);
+    var $content = $('<div class="content">').appendTo($item);
+    var $form = $('<form class="ui form">').appendTo($content);
+    var $title = $('<input type="text" name="title" placeholder="Pin Title">').appendTo($form);
+    var $description = $('<input type="text" name="description" placeholder="Description">').appendTo($form);
+    var $add = $('<button class="ui button" type="submit">Add</button>').appendTo($form);
+
+    $item.prependTo($list);
+    $title.focus();
+
+    return $form;
+
+  }
+
+
+
+  // used for adding new pins
+  function postPin(pin, title, description) {
+    var data = {
+
+      latitude: pin.position.lat(),
+      longitude: pin.position.lng(),
+      title: title,
+      description: description
+
+    };
+    $.post("/maps/" + currentMap.mapId, data).done(function() {
+      getPins();
+    });
+  }
+
+
+
+
 
   currentMap.mapId = getMapId();
 
@@ -339,9 +344,9 @@ initMap = function() {
 
       // basic check to make sure values aren't empty.
       if($inputs[0].value && $inputs[1].value){
-        postPin(marker, $inputs[0].value, $inputs[1].value)
+        postPin(marker, $inputs[0].value, $inputs[1].value);
       }
 
     });
   });
-}
+};

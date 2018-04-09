@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
       table.string('password_hash');
       table.timestamps(true, true);
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
@@ -20,5 +20,5 @@ exports.down = function(knex, Promise) {
       table.dropColumn('password_hash');
       table.dropTimestamps();
     })
-  ])
+  ]);
 };

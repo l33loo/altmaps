@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     knex.schema.withSchema('public').table('map_pins', function(table) {
       table.timestamps(true, true);
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
@@ -12,5 +12,5 @@ exports.down = function(knex, Promise) {
       table.dropColumn('created_at');
       table.dropColumn('updated_at');
     })
-  ])
+  ]);
 };

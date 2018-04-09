@@ -32,7 +32,7 @@ module.exports = (knex) => {
           }
         }
         res.json(results);
-    });
+      });
   });
 
   router.get("/json", (req, res) => {
@@ -54,7 +54,7 @@ module.exports = (knex) => {
             // send response as json.
             res.json(results.rows);
           });
-      });
+        });
     } else {
 
       // if not logged in, just select all maps (no favourite data if no user)
@@ -75,7 +75,7 @@ module.exports = (knex) => {
             // send response as json.
             res.json(results);
           });
-      });
+        });
     }
 
   });
@@ -103,7 +103,7 @@ module.exports = (knex) => {
   });
 
   router.get("/new", (req, res) => {
-    getPage(req, res, "create_map")
+    getPage(req, res, "create_map");
   });
 
   router.get("/:mapID", (req, res) => {
@@ -131,7 +131,7 @@ module.exports = (knex) => {
         })
         .then(() => {
           res.render("map", templateVars);
-        })
+        });
       } else {
         templateVars["username"] = undefined;
         res.render("map", templateVars);
@@ -153,8 +153,8 @@ module.exports = (knex) => {
         description: req.body.description
       }).returning("id")
       .then(function(response){
-        console.log(response)
-        res.redirect("/maps/" + response[0])
+        console.log(response);
+        res.redirect("/maps/" + response[0]);
       })
       .catch(function(err) {
         console.error(err);
@@ -167,7 +167,7 @@ module.exports = (knex) => {
     if(req.loggedIn){
       knex("favorite_maps").insert({
         user_id: req.session.userId,
-        map_id: req.params.mapId,
+        map_id: req.params.mapId
       })
       .then(function(){
         res.status(200).send();
@@ -194,7 +194,7 @@ module.exports = (knex) => {
     }
   });
 
-  router.delete("/:mapID/:pinID" , (req, res) => {
+  router.delete("/:mapID/:pinID", (req, res) => {
     if(req.loggedIn){
       knex("map_pins")
         .del()
@@ -251,4 +251,4 @@ module.exports = (knex) => {
   });
 
   return router;
-}
+};

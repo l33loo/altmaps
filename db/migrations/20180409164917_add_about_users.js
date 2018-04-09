@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     knex.schema.withSchema('public').table('users', function(table) {
       table.text('about');
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
@@ -11,5 +11,5 @@ exports.down = function(knex, Promise) {
     knex.schema.withSchema('public').table('map_pins', function(table) {
       table.dropColumn('about');
     })
-  ])
+  ]);
 };
