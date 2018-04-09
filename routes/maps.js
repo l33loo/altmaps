@@ -82,7 +82,6 @@ function getPage(req, res, views) {
       .where("id", req.session.userId)
       .limit(1)
       .then(rows => {
-        console.log("BOOYAH: " + rows[0].username);
         res.render(views, {loggedIn: req.loggedIn, userId: req.params.userId, username: rows[0].username});
       })
       .catch(err => {
