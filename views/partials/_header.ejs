@@ -6,17 +6,17 @@
     <div class="right menu">
       <% if(loggedIn) { %>
         <div class="item">
-          <div>Welcome Back <%= username %></div>
+          <div>Welcome back, <%= username %></div>
         </div>
         <form action="/logout" method="POST" >
           <button class="ui button" type="submit">Log Out</button>
         </form>
       <% } else { %>
       <div class="item">
-        <a class="ui button">Log in</a>
+        <a class="ui button" href="/login">Log in</a>
       </div>
       <div class="item">
-        <a class="ui primary button">Sign Up</a>
+        <a class="ui primary button" href="/register">Sign Up</a>
       </div>
       <% } %>
     </div>
