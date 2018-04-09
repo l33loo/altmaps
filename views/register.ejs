@@ -27,29 +27,33 @@
       </div>
 
       <div class="ui container segment">
-        <form class="ui form">
-          <div class="field">
-            <label>Username</label>
-            <input id="username" type="text" name="username" placeholder="Username">
+        <div class="ui grid">
+          <div class="eight wide centered column">
+            <form class="ui form">
+              <div class="field">
+                <label>Username</label>
+                <input id="username" type="text" name="username" placeholder="Username">
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input id="email" type="text" name="email" placeholder="you@...">
+              </div>
+              <div class="field">
+                <label>First Name</label>
+                <input id="firstname" type="text" name="first-name" placeholder="First Name">
+              </div>
+              <div class="field">
+                <label>Last Name</label>
+                <input id="lastname" type="text" name="last-name" placeholder="Last Name">
+              </div>
+              <div class="field">
+                <label>Password</label>
+                <input id="password" type="password" name="password" placeholder="Enter Password">
+              </div>
+              <button class="ui primary button" type="submit">Submit</button>
+            </form>
           </div>
-          <div class="field">
-            <label>Email</label>
-            <input id="email" type="text" name="email" placeholder="you@...">
-          </div>
-          <div class="field">
-            <label>First Name</label>
-            <input id="firstname" type="text" name="first-name" placeholder="First Name">
-          </div>
-          <div class="field">
-            <label>Last Name</label>
-            <input id="lastname" type="text" name="last-name" placeholder="Last Name">
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <input id="password" type="password" name="password" placeholder="Enter Password">
-          </div>
-          <button class="ui primary button" type="submit">Submit</button>
-        </form>
+        </div>
       </div>
 
       <% include partials/_footer %>
