@@ -53,24 +53,38 @@
 $(document).ready(function() {
   $("#username").focus();
 
-// jQuery.post()
-// Categories: Ajax > Shorthand Methods
-// jQuery.post( url [, data ] [, success ] [, dataType ] )
-
-
-  $("form").on("submit", function() {
-    var $inputs = $(this).children("input");
+  $("form").on("click", "button", function(event) {
+    event.preventDefault();
+    var $inputs = $("input").map(function() {
+      return $(this).val();
+    }).toArray();
     var data = {
-      username: $inputs[0].value,
-      email: $inputs[1].value,
-      first_name: $inputs[2].value,
-      last_name: $inputs[3].value,
-      password: $inputs[4].value
+      username: $inputs[0],
+      email: $inputs[1],
+      first_name: $inputs[2],
+      last_name: $inputs[3],
+      password: $inputs[4]
     }
 
-  $.post("/register", $inputs, function(response) {
-    console.log("SERVEERRRR: " + response);
+    $.post("/register", data, function(response) {
+      $("span.error").remove();
+      var msgOne = "This username is already registered. Please select another one.";
+      var msgTwo = "This email is already registered. Please log in or use a different email.";
+      var msgThree = "Please fill out all the fields.";
+      function errMessage(text) {
+        var $errMsg = $("<span>").addClass("error").text(text);
+        return $("form").append($errMsg);
+      }
+      if (Number(response) === 1) {
+        return errMessage(msgOne);
+      }
+      if (Number(response) === 2) {
+        return errMessage(msgTwo);
+      }
+      if (Number(response) === 3) {
+        return errMessage(msgThree);
+      }
+    });
   });
-});
 
 });
