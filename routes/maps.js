@@ -32,18 +32,44 @@ module.exports = (knex) => {
 
   router.get("/json", (req, res) => {
     if(req.loggedIn){
-      // SELECT * FROM favorite_maps RIGHT JOIN maps ON favorite_maps.map_id = maps.id AND favorite_maps.user_id = 1 ORDER BY maps.id
-      //SELECT * FROM maps LEFT JOIN favorite_maps ON maps.id = favorite_maps.map_id AND favorite_maps.user_id = ?
+
+      // selects maps and favourite status for current user
       knex.raw("SELECT * FROM favorite_maps RIGHT JOIN maps ON favorite_maps.map_id = maps.id AND favorite_maps.user_id = ? ORDER BY maps.id", [req.session.userId])
         .then((results) => {
-          res.json(results.rows);
+          // to avoid the mother of all SQL queries, selects contributor count for each map.
+          knex.raw("SELECT map_id, COUNT(DISTINCT created_by) AS contributors FROM map_pins GROUP BY map_id ORDER BY map_id")
+          .then((contributorsResults) => {
+
+            // add the contributor counts to each result row (aka map)
+            // note we need to reference .rows because we used knex.raw for the query
+            results.rows.forEach((row, index) => {
+              row.contributors = contributorsResults.rows[index].contributors;
+            });
+
+            // send response as json.
+            res.json(results.rows);
+          });
       });
     } else {
+
+      // if not logged in, just select all maps (no favourite data if no user)
       knex
         .select("*")
         .from("maps")
         .then((results) => {
-          res.json(results);
+          // select contributor count
+          knex.raw("SELECT map_id, COUNT(DISTINCT created_by) AS contributors FROM map_pins GROUP BY map_id ORDER BY map_id")
+          .then((contributorsResults) => {
+
+            // add the contributor counts to each result row (aka map)
+            // note that here results is the array of rows because we used knex queries.
+            results.forEach((row, index) => {
+              row.contributors = contributorsResults.rows[index].contributors;
+            });
+
+            // send response as json.
+            res.json(results);
+          });
       });
     }
 
@@ -83,36 +109,40 @@ function getPage(req, res, views) {
 
   // MAP
   router.get("/:mapID", (req, res) => {
-      let templateVars = new Object;
-      knex("maps")
-        .select("title", "description")
-        .where("id", req.params.mapID)
-        .limit(1)
-        .then(function(result) {
+    let templateVars = new Object;
+    knex("maps")
+    .select("title", "description")
+    .where("id", req.params.mapID)
+    .limit(1)
+    .then(function(result) {
 
-          templateVars["loggedIn"] = req.loggedIn;
-          templateVars["userId"] = req.session.userId;
-          templateVars["title"] = result[0].title;
-          templateVars["description"] = result[0].description;
+      templateVars["loggedIn"] = req.loggedIn;
+      templateVars["userId"] = req.session.userId;
+      templateVars["title"] = result[0].title;
+      templateVars["description"] = result[0].description;
+    })
+    .then(() => {
+      if(req.loggedIn){
+        knex("users")
+        .select()
+        .where("id", req.session.userId)
+        .limit(1)
+        .then(function(rows) {
+
+          templateVars["username"] = rows[0].username;
         })
         .then(() => {
-          knex("users")
-            .select()
-            .where("id", req.session.userId)
-            .limit(1)
-            .then(function(rows) {
-
-              templateVars["username"] = rows[0].username;
-            })
-            .then(() => {
-              res.render("map", templateVars);
-            })
-            .catch();
+          res.render("map", templateVars);
         })
-        .catch(err => {
-          console.error(err);
-          res.status(404).send("This maps does not exists.");
-        });
+      } else {
+        templateVars["username"] = undefined;
+        res.render("map", templateVars);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(404).send("This maps does not exist.");
+    });
 
 
     // Do we instead want to redirect to  with a flash error message on the page or alert?
@@ -171,6 +201,22 @@ function getPage(req, res, views) {
           console.error(err);
           res.status(500).send("Error deleting favourite");
         });
+    }
+  });
+
+  router.delete("/:mapID/:pinID" , (req, res) => {
+    //if (user logged in)...
+    if(req.loggedIn){
+      knex("map_pins")
+        .del()
+        .where("id",  req.params.pinID)
+        .then(res.status(201).send())
+        .catch(function(err) {
+          console.error(err);
+          res.status(500).send();
+        });
+    } else {
+      res.status(401).send();
     }
   });
 
