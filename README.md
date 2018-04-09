@@ -12,11 +12,11 @@ This project served as practice with full-stack development. For now, registered
 4. Registered users have profiles that indicate their favourite maps and the maps they've contributed to.
 
 ## Final Product
-!["Splash Screen"](https://github.com/thelornenelson/tiny-app/blob/master/docs/main-splash.png)
-!["Map Listing"](https://github.com/thelornenelson/tiny-app/blob/master/docs/map-listing.png)
-!["Map detailed view"](https://github.com/thelornenelson/tiny-app/blob/master/docs/map-pins-view.png)
-!["Editing pin"](https://github.com/thelornenelson/tiny-app/blob/master/docs/map-edit-pin.png)
-!["User Profile"](https://github.com/thelornenelson/tiny-app/blob/master/docs/user-profile.png)
+!["Splash Screen"](https://github.com/thelornenelson/altmaps/blob/master/docs/main-splash.png)
+!["Map Listing"](https://github.com/thelornenelson/altmaps/blob/master/docs/map-listing.png)
+!["Map detailed view"](https://github.com/thelornenelson/altmaps/blob/master/docs/map-pins-view.png)
+!["Editing pin"](https://github.com/thelornenelson/altmaps/blob/master/docs/map-edit-pin.png)
+!["User Profile"](https://github.com/thelornenelson/altmaps/blob/master/docs/user-profile.png)
 
 ## Getting Started
 
