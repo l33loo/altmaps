@@ -26,6 +26,11 @@ module.exports = (knex) => {
       .where({map_id: req.params.id})
       .orderBy("title", "DESC")
       .then((results) => {
+        if(req.loggedIn){
+          for(let row in results){
+            results[row].loggedIn = true;
+          }
+        }
         res.json(results);
     });
   });
