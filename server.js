@@ -170,7 +170,7 @@ function getUserIdFromEmail(req, res) {
     .where('email', req.body.email)
     .then(rows => {
       req.session.userId = rows[0].id;
-      res.redirect("/");
+      res.status(200).send("/");
     })
     .catch(err => {
       console.error(err);
