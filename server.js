@@ -104,11 +104,10 @@ app.get("/register", (req, res) => {
 });
 
 function checkEmptyFields(req, res) {
-  console.log(req.body.username);
   return (!req.body.username ||
     !req.body.email ||
-    !req.body.firstName ||
-    !req.body.lastName ||
+    !req.body.first_name ||
+    !req.body.last_name ||
     !req.body.password)
 }
 
@@ -119,10 +118,10 @@ function checkUsernameReg(req, res, callback) {
     .from('users')
     .where('username', req.body.username)
     .then(user => {
-      if (user.length === 0) {
+      if (!user.length) {
         callback();
       } else {
-        res.status(400).send("This username is already registered.");
+        res.status(200).send("1");
       }
     })
     .catch(err => {
@@ -136,10 +135,10 @@ function checkEmailReg(req, res, cb) {
     .from('users')
     .where('email', req.body.email)
     .then(user => {
-      if (user.length === 0) {
+      if (!user.length) {
         cb();
       } else {
-        res.status(400).send("This email is already registered. Please log in instead.");
+        res.status(200).send("2");
       }
     })
     .catch(err => {
@@ -179,9 +178,8 @@ function getUserIdFromEmail(req, res) {
 }
 
 app.post("/register", (req, res) => {
-  console.log("LALLALALLALLLA!!");
   if (checkEmptyFields(req)) {
-    res.status(400).send("Please fill out all the fields.");
+    res.status(200).send("3");
   } else {
     checkUsernameReg(req, res, function() {
       checkEmailReg(req, res, function() {
