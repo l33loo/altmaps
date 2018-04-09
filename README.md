@@ -22,7 +22,7 @@ This project served as practice with full-stack development. For now, registered
 
 1. Clone this repository.
 2. Install dependencies using the `npm install` command.
-3. Create a new postgresql database named `altmaps` and make sure there is a correctly configured `.env` file in the root project folder. Example file `.env.example` is included for reference.
+3. Create a new postgresql database make sure there is a correctly configured `.env` file in the root project folder. Example file `.env.example` is included for reference.
 4. Create database schema by running `knex migrate:latest`
 5. Populate database with seed data by running `knex seed:run`
 6. Start the web server using the `npm run local` command. The app will be served at <http://localhost:8080/>.
