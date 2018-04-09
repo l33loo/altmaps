@@ -9,7 +9,12 @@
       </div>
       <div class="twelve wide column">
         <h4 class="ui inverted header">Final Thoughts</h4>
-        <p>Nothing caught your eye? Why not <a href="/maps/new" >add your own</a></p>
+        <% if(loggedIn) { %>
+          <p>Nothing caught your eye? Why not <a href="/maps/new" >add your own</a></p>
+        <% } else { %>
+          <p>Trust us, it's a ton of fun! <a href="/register" > Join the fun</a></p>
+        <% } %>
+
       </div>
     </div>
   </div>
