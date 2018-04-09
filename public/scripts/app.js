@@ -181,6 +181,17 @@ initMap = function() {
   }
 
   function getPins(){
+    // remove any previous markers
+    if("markers" in currentMap){
+      for(marker in currentMap.markers){
+        currentMap.markers[marker].setMap(null);
+      }
+      delete currentMap.markers;
+    }
+
+    // add new blank markers object
+    currentMap.markers = {};
+
     $.getJSON("/maps/" + currentMap.mapId + "/json").then(function(pins){
       currentMap.pins = pins;
       currentMap.pins.forEach(function(pin){
@@ -206,7 +217,6 @@ initMap = function() {
             '</div>';
 
         google.maps.event.addListener(newMarker, 'click', function() {
-          console.dir(newMarker);
 
           // highlight corresponding entry in list
           $("#pins-list").children().removeClass("highlight");
@@ -283,7 +293,7 @@ initMap = function() {
   });
 
   currentMap.infoWindow = new google.maps.InfoWindow();
-  currentMap.markers = {};
+
 
   getPins();
 
