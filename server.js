@@ -61,7 +61,6 @@ app.use(express.static("public"));
 app.use("/maps", mapsRoutes(knex));
 app.use("/users", usersRoutes(knex));
 
-// HOME
 app.get("/", (req, res) => {
   res.redirect("/maps");
 });
@@ -170,7 +169,7 @@ app.post("/register", (req, res) => {
   }
 });
 
-// logs in user by user_id, which is entered into the email field on client side.
+// logs in user with email
 app.post("/login", (req, res) => {
   if(req.body.email) {
     knex
