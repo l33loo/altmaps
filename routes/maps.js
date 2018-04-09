@@ -182,7 +182,7 @@ function getPage(req, res, views) {
     if(req.loggedIn){
       knex("map_pins").insert({
 
-        created_by: req.session.user_id,
+        created_by: req.session.userId,
         map_id: req.params.mapID,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
