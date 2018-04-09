@@ -24,6 +24,7 @@ module.exports = (knex) => {
       .from("map_pins")
       .leftOuterJoin('users', 'created_by', 'users.id')
       .where({map_id: req.params.id})
+      .orderBy("title", "DESC")
       .then((results) => {
         res.json(results);
     });
