@@ -2,14 +2,16 @@
 
 Altmaps is an application that allows users to create maps collaboratively and share these maps with the world!
 
-This project served as practice with full-stack development.
+This project served as practice with full-stack development. For now, registered users are authenticated with their email only (not passwords).
 
-## Final Product
+## Features
 
 1. Maps can contain pins that include information about the location.
 2. All users can see the maps.
 3. Authenticated users can favorite, create, and edit maps.
 4. Registered users have profiles that indicate their favourite maps and the maps they've contributed to.
+
+## Final Product
 
 ## Dependencies
 
