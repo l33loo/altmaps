@@ -38,23 +38,23 @@ module.exports = (knex) => {
       });
   });
 
-function getPage(req, res, uID) {
-  if (req.loggedIn) {
-    knex("users")
-      .select()
-      .where("id", uID)
-      .limit(1)
-      .then(rows => {
-        res.render("user", {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(404).send(`Please log in to view user profiles.`);
-      });
-  } else {
-    res.status(401).send(`Please log in to view user profiles.`);
+  function getPage(req, res, uID) {
+    if (req.loggedIn) {
+      knex("users")
+        .select()
+        .where("id", uID)
+        .limit(1)
+        .then(rows => {
+          res.render("user", {loggedIn: req.loggedIn, username: rows[0].username, userId: uID});
+        })
+        .catch(err => {
+          console.error(err);
+          res.status(401).send(`Please log in to view user profiles.`);
+        });
+    } else {
+      res.status(401).send(`Please log in to view user profiles.`);
+    }
   }
-}
 
   router.get("/profile", (req, res) => {
     res.redirect(`/users/${req.session.userId}`);
@@ -62,6 +62,21 @@ function getPage(req, res, uID) {
   // VIEW USER PROFILE
   router.get("/:userId", (req, res) => {
     getPage(req, res, req.params.userId);
+  });
+
+  router.post("/:userId/about", (req, res) => {
+    if(req.loggedIn){
+      knex("users").insert({
+        about: req.body.about,
+      }).returning("about")
+      .then(function(response){
+        res.status(201).send(response[0]);
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.redirect("/");
+      });
+    }
   });
 
   // EDIT USER PROFILE via AJAX (app.js) (PUT "/users/:userID");
