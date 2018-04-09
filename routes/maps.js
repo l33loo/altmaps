@@ -109,36 +109,40 @@ function getPage(req, res, views) {
 
   // MAP
   router.get("/:mapID", (req, res) => {
-      let templateVars = new Object;
-      knex("maps")
-        .select("title", "description")
-        .where("id", req.params.mapID)
-        .limit(1)
-        .then(function(result) {
+    let templateVars = new Object;
+    knex("maps")
+    .select("title", "description")
+    .where("id", req.params.mapID)
+    .limit(1)
+    .then(function(result) {
 
-          templateVars["loggedIn"] = req.loggedIn;
-          templateVars["userId"] = req.session.userId;
-          templateVars["title"] = result[0].title;
-          templateVars["description"] = result[0].description;
+      templateVars["loggedIn"] = req.loggedIn;
+      templateVars["userId"] = req.session.userId;
+      templateVars["title"] = result[0].title;
+      templateVars["description"] = result[0].description;
+    })
+    .then(() => {
+      if(req.loggedIn){
+        knex("users")
+        .select()
+        .where("id", req.session.userId)
+        .limit(1)
+        .then(function(rows) {
+
+          templateVars["username"] = rows[0].username;
         })
         .then(() => {
-          knex("users")
-            .select()
-            .where("id", req.session.userId)
-            .limit(1)
-            .then(function(rows) {
-
-              templateVars["username"] = rows[0].username;
-            })
-            .then(() => {
-              res.render("map", templateVars);
-            })
-            .catch();
+          res.render("map", templateVars);
         })
-        .catch(err => {
-          console.error(err);
-          res.status(404).send("This maps does not exists.");
-        });
+      } else {
+        templateVars["username"] = undefined;
+        res.render("map", templateVars);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(404).send("This maps does not exist.");
+    });
 
 
     // Do we instead want to redirect to  with a flash error message on the page or alert?
