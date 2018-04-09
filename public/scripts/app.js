@@ -89,6 +89,9 @@ initMap = function() {
     }
   }
 
+  function toggleForm(){
+
+  }
 
   function createPlaceListItem(title, description, placeId, loggedIn){
 
@@ -112,6 +115,8 @@ initMap = function() {
       var $delete = $('<i class="delete icon">').appendTo($header);
 
       $edit.on('click', function(){
+
+
         //edit place by replacing listing with form.
 
         var $newContent = $('<div class="content">');
@@ -122,7 +127,13 @@ initMap = function() {
 
         $formEdit.on('click', editButtonHandler(placeId));
 
-        $content.replaceWith($newContent);
+        // removes previously open edit or delete form and replaces with original content
+        if(currentMap.previousContent){
+          currentMap.newContent.replaceWith(currentMap.previousContent);
+        }
+        currentMap.previousContent = $content.replaceWith($newContent);
+        currentMap.newContent = $newContent;
+
       });
 
       $delete.on('click', function(){
@@ -130,7 +141,13 @@ initMap = function() {
         var $newDescription = $('<div class="description">');
         var $deleteButton = $('<button class="ui button">Yes, delete it!</button>').appendTo($newDescription);
         var $cancelButton = $('<button class="ui button">No, no, keep it!</button>').appendTo($newDescription);
-        $description.replaceWith($newDescription);
+
+        // removes previously open edit or delete form and replaces with original content
+        if(currentMap.previousContent){
+          currentMap.newContent.replaceWith(currentMap.previousContent);
+        }
+        currentMap.previousContent = $description.replaceWith($newDescription);
+        currentMap.newContent = $newDescription;
 
         $deleteButton.on('click', function(event){
           event.preventDefault();
