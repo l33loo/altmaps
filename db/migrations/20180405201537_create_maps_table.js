@@ -8,11 +8,11 @@ exports.up = function(knex, Promise) {
       table.string('category');
       table.timestamps(true, true);
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
   return Promise.all([
     knex.schema.dropTable('maps')
-  ])
+  ]);
 };

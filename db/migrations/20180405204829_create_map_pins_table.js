@@ -15,11 +15,11 @@ exports.up = function(knex, Promise) {
       table.string('category');
       table.string('color');
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
   return Promise.all([
     knex.schema.dropTable('map_pins')
-  ])
+  ]);
 };
