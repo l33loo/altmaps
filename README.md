@@ -28,6 +28,16 @@ This project served as practice with full-stack development. For now, registered
 6. Start the web server using the `npm run local` command. The app will be served at <http://localhost:8080/>.
 7. Go to <http://localhost:8080/> in your browser.
 
+## Sample users
+
+5 sample users are included in the seed data. Users can log in using their email - no password is required.
+
+- andrew@andrew.andrew
+- tess@tess.tess
+- lila@lila.lila
+- bob@bob.bob
+- betty@betty.betty
+
 ## Dependencies
 
 - Node 5.10.x or above
